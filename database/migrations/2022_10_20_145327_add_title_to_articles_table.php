@@ -15,7 +15,7 @@ class AddTitleToArticlesTable extends Migration
     {
         Schema::table('articles', function (Blueprint $table) {
             $table->string('content', 255);
-            $table->string('name',30);
+            $table->string('title',30);
         });
     }
 
