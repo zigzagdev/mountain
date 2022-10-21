@@ -11,5 +11,6 @@ class Comment extends Model
 
     protected $fillable = [
         'comments',
+        'name'
     ];
 }
