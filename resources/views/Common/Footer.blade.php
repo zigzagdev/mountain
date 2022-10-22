@@ -1,0 +1,1 @@
+resources/views/Common/Footer.blade.php
