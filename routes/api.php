@@ -1,8 +1,9 @@
 <?php
 
+namespace App\Http\Controllers\Api;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\RegisterUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +20,7 @@ use App\Http\Controllers\Api\RegisterUserController;
 Route::middleware('api')->group(function () {
 
   //RegisterUserController
-  Route::controller(RegisterUserController::class)->group(function (){
-      Route::post('/RegisterUser', 'RegisterUser');
-  });
+    Route::post('/RegisterUser', [RegisterUserController::class, 'RegisterUser']);
 
   //After Login action
   Route::middleware('auth:sanctum')->group(function () {

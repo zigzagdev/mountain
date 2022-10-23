@@ -1,12 +1,14 @@
 <?php
+
 namespace App\Consts\Api;
 
-class MessageConsts {
+class MessageConst
+{
 
     //HTTP_REQUEST_SUCCEED
     public const OK = 200;
     public const CREATED = 201;
-    public const No_Content = 204 ;
+    public const No_Content = 204;
 
     //HTTP_REQUEST_FAILED
     public const Bad_Request = 400;
