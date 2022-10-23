@@ -1,1 +1,6 @@
-resources/views/Common/Footer.blade.php
+@section('footer')
+ ==================
+ All are reserved by Matthew
+
+ ==================
+@endsection

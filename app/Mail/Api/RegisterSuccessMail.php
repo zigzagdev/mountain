@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\Api;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class RegisterSuccessmail extends Mailable
+class RegisterSuccessMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,10 +15,11 @@ class RegisterSuccessmail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($nickName, $address)
     {
-        //
-    }
+        $this->nickName = $nickName;
+        $this->address = $address;
+     }
 
     /**
      * Build the message.
@@ -28,6 +28,11 @@ class RegisterSuccessmail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->to($this->address)
+            ->subject('登録が完了致しました。')
+            ->text('mail.Api.RegisterSuccess')
+            ->with([
+                'name' => $this->nickName,
+            ]);
     }
 }
