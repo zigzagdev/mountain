@@ -67,6 +67,8 @@ class AdminRequest extends FormRequest
     protected function failedValidation(validator $validator)
     {
         $errors = $validator->errors()->toArray();
+
+        // resetFunction is get the first element form $errors Array.
         $response = [
           'statusCode'  => MessageConst::Bad_Request,
           'statusMessage' => reset($errors)[0]
