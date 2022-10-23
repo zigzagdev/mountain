@@ -52,15 +52,15 @@ class AdminRequest extends FormRequest
     public function messages()
     {
         return [
-            'required' => ':attributesは入力必須となっております。',
-            'string' => ':attributesの値が不正です。',
-            'integer' => ':attributesの値が不正です。',
-            'date' => ':attributesには日付のみ入力可能です。',
+            'required' => ':attributeは入力必須となっております。',
+            'string' => ':attributeの値が不正です。',
+            'integer' => ':attributeの値が不正です。',
+            'date' => ':attributeには日付のみ入力可能です。',
             'email' => 'メールアドレスの形式が正しくありません。',
-            'unique' => ':attributesは既に使用されています。',
-            'min' => ':attributesの値は%d文字以上の入力が必要です。',
-            'max' => ':attributesの値は%d文字以下の入力が必要です。',
-            'between' => ':attributesの値は%d文字から%d文字の間での入力となります。',
+            'unique' => ':attributeは既に使用されています。',
+            'min' => ':attributeの値は%d文字以上の入力が必要です。',
+            'max' => ':attributeの値は%d文字以下の入力が必要です。',
+            'between' => ':attributeの値は%d文字から%d文字の間での入力となります。',
         ];
     }
 
