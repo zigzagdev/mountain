@@ -3,7 +3,12 @@ namespace App\Consts\Api;
 
 class MessageConsts {
 
-    //HTTP_REQUEST
+    //HTTP_REQUEST_SUCCEED
+    public const OK = 200;
+    public const CREATED = 201;
+    public const No_Content = 204 ;
+
+    //HTTP_REQUEST_FAILED
     public const Bad_Request = 400;
     public const Unauthorized = 401;
     public const Payment_Required = 403;
@@ -20,5 +25,6 @@ class MessageConsts {
     public const Gateway_Timeout = 504;
     public const HTTP_Version_Not_Supported = 505;
     public const Not_Extended = 510;
+
 
 }
