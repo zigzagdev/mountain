@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Api;
 
+use App\Consts\Api\MessageConst;
 use App\Consts\CommonConst;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AdminRequest extends FormRequest
 {
@@ -28,7 +30,7 @@ class AdminRequest extends FormRequest
         return [
             "nickName" => "required|max:255",
             "password" => "required|max:100",
-            "address" => "required|max:100|unique:customers",
+            "address" => "required|max:100|unique:admins",
             "age" => "required|integer|between:10,120",
             "sex" => "required|integer|between:0,2",
         ];
@@ -59,9 +61,18 @@ class AdminRequest extends FormRequest
             'min' => ':attributesの値は%d文字以上の入力が必要です。',
             'max' => ':attributesの値は%d文字以下の入力が必要です。',
             'between' => ':attributesの値は%d文字から%d文字の間での入力となります。',
-            'c_alpha' => ':attributesの入力形式が正しくありません。',
-            'tel_num' => ':attributesの入力形式が正しくありません。',
-
         ];
+    }
+
+    protected function failedValidation(validator $validator)
+    {
+        $errors = $validator->errors()->toArray();
+        $response = [
+          'statusCode'  => MessageConst::Bad_Request,
+          'statusMessage' => reset($errors)[0]
+        ];
+        throw new HttpResponseException(
+            response()->json($response, MessageConst::Bad_Request)
+        );
     }
 }
