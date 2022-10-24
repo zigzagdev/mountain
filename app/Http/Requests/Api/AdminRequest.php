@@ -75,7 +75,7 @@ class AdminRequest extends FormRequest
             //password
             "password.required" => $message['required'],
             "password.max" => sprintf($message['max'], 255),
-//            "password.regex" => $message['regex'],
+            "password.regex" => $message['regex'],
             //address
             "address.required" => $message['required'],
             "address.max" => sprintf($message['max'], 255),
