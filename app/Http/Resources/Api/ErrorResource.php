@@ -7,7 +7,7 @@ use Illuminate\Http\Resources\Json\ResourceResponse;
 
 class ErrorResource extends JsonResource
 {
-    public function __construct($request, $statusCode = 401)
+    public function __construct($request, $statusCode)
     {
         parent::__construct($request);
 
