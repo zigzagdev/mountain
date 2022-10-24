@@ -49,7 +49,7 @@ class AdminRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function errormessage()
     {
         return [
             'required' => ':attributeは入力必須となっております。',
@@ -63,6 +63,33 @@ class AdminRequest extends FormRequest
             'between' => ':attributeの値は%d文字から%d文字の間での入力となります。',
         ];
     }
+
+    public function messages()
+    {
+        $message = $this->errormessage();
+        return  [
+            //firstname
+            "nickName.required" => $message['required'],
+            "nickName.max" => sprintf($message['max'], 255),
+            //password
+            "password.required" => $message['required'],
+            "password.max" => sprintf($message['max'], 255),
+            //address
+            "address.required" => $message['required'],
+            "address.max" => sprintf($message['max'], 255),
+            "address.email" => $message['email'],
+            "address.unique" => $message['unique'],
+            //age
+            "age.required" => $message['required'],
+            "age.integer" => $message['integer'],
+            "age.between" => sprintf($message['between'], 10, 120),
+            //sex
+            "sex.required" => $message['required'],
+            "sex.integer" => $message['integer'],
+            "sex.between" => sprintf($message['between'], 0, 2),
+        ];
+    }
+
 
     protected function failedValidation(validator $validator)
     {
