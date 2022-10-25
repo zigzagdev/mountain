@@ -27,8 +27,8 @@ class AdminRequest extends FormRequest
     public function rules()
     {
         return [
-            "nickName" => "required|max:255|regex:/^[A-Za-z]+$/",
-            "password" => "required|max:100|regex:/^[A-Za-z]+$/",
+            "nickName" => "required|max:255|regex:/^[A-Za-z\d_\-]+$/",
+            "password" => "required|max:100|regex:/^[A-Za-z\d_\-]+$/",
             "address" => "required|max:100|unique:admins|email",
             "age" => "required|integer|between:10,120",
             "sex" => "required|integer|between:0,2",
@@ -59,8 +59,8 @@ class AdminRequest extends FormRequest
             'unique' => ':attributeは既に使用されています。',
             'min' => ':attributeの値は%d文字以上の入力が必要です。',
             'max' => ':attributeの値は%d文字以下の入力が必要です。',
-            'between' => ':attributeの値は%d文字から%d文字の間での入力となります。',
-            'regex' => ':attributeは半角英数のみ有効となっております。'
+            'between' => ':attributeは%dから%dの間の数字で入力してください。',
+            'regex' => ':attributeは半角英数字のみ有効となっております。'
         ];
     }
 
