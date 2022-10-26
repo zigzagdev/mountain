@@ -7,13 +7,12 @@ use Illuminate\Http\Resources\Json\ResourceResponse;
 
 class ErrorResource extends JsonResource
 {
-    public function __construct($request, $statusCode)
+    public $statusCode;
+
+    public function __construct($resource, $statusCode = 401)
     {
-        parent::__construct($request);
-
+        parent::__construct($resource);
         $this->statusCode = $statusCode;
-        $this->statusMessage = $request->statusMessage;
-
     }
     /**
      * Transform the resource into an array.
@@ -25,7 +24,12 @@ class ErrorResource extends JsonResource
     {
         return [
             'statusCode' => $this->statusCode,
-            'statusMessage' => $this->statusMessage
+            'statusMessage' => $this->statusMessage,
         ];
+    }
+
+    public function toResponse($request)
+    {
+        return (new ResourceResponse($this))->toResponse($request)->setStatusCode($this->statusCode);
     }
 }
