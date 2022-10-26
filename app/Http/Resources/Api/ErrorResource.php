@@ -33,4 +33,3 @@ class ErrorResource extends JsonResource
         return (new ResourceResponse($this))->toResponse($request)->setStatusCode($this->statusCode);
     }
 }
-
