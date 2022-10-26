@@ -34,4 +34,3 @@ class ErrorResource extends JsonResource
     }
 }
 
-
