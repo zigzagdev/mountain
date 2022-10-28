@@ -28,4 +28,3 @@ class RegisterUserResource extends JsonResource
 }
 
 
-
