@@ -15,10 +15,9 @@ class RegisterSuccessMail extends Mailable
      *
      * @return void
      */
-    public function __construct($nickName, $address)
+    public function __construct($nickName)
     {
         $this->nickName = $nickName;
-        $this->address = $address;
      }
 
     /**
@@ -28,7 +27,7 @@ class RegisterSuccessMail extends Mailable
      */
     public function build()
     {
-        return $this->to($this->address)
+        return $this->from(config('mail.from.address'))
             ->subject('登録が完了致しました。')
             ->text('mail.Api.RegisterSuccess')
             ->with([
