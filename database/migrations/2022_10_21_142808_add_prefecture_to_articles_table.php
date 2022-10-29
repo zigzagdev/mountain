@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddContentToCommentsTable extends Migration
+class AddPrefectureToArticlesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddContentToCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('comments', function (Blueprint $table) {
-            $table->string('content', 255);
-            $table->string('name',30);
+        Schema::table('articles', function (Blueprint $table) {
+            $table->integer('prefecture');
         });
     }
 
@@ -26,7 +25,7 @@ class AddContentToCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('comments', function (Blueprint $table) {
+        Schema::table('articles', function (Blueprint $table) {
         });
     }
 }
