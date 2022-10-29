@@ -28,4 +28,3 @@ class ArticleRequest extends FormRequest
         ];
     }
 }
-
