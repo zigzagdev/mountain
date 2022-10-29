@@ -41,7 +41,6 @@ class RegisterUserController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-
 //            $address = $admin->address;
 //            $nickName = $admin->nickName;
 //
@@ -80,3 +79,8 @@ class RegisterUserController extends Controller
 //    }
 
 }
+
+
+
+
+
