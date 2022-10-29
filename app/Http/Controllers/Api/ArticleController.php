@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {
-    public function makeColumn ($adminId){
+    public function makeColumn ($adminId,Request $request){
         try {
             DB::beginTransaction();
 
