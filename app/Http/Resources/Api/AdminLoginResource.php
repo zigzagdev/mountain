@@ -23,4 +23,3 @@ class AdminLoginResource extends JsonResource
 }
 
 
-
