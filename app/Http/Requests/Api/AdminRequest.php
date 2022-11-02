@@ -106,4 +106,3 @@ class AdminRequest extends FormRequest
         );
     }
 }
-
