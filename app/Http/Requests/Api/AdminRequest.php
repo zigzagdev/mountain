@@ -97,7 +97,6 @@ class AdminRequest extends FormRequest
     {
         $errors = $validator->errors()->toArray();
 
-        // resetFunction is get the first element form $errors Array.
         $response = [
           'statusCode'  => MessageConst::Bad_Request,
           'statusMessage' => reset($errors)[0]
@@ -107,3 +106,8 @@ class AdminRequest extends FormRequest
         );
     }
 }
+
+
+
+
+
