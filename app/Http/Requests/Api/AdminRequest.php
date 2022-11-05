@@ -48,7 +48,7 @@ class AdminRequest extends FormRequest
         ];
     }
 
-    public function errormessage()
+    public function errorMessages()
     {
         return [
             'required' => ':attributeは入力必須となっております。',
@@ -66,7 +66,7 @@ class AdminRequest extends FormRequest
 
     public function messages()
     {
-        $message = $this->errormessage();
+        $message = $this->errorMessages();
         return  [
             //nickName
             "nickName.required" => $message['required'],
@@ -97,7 +97,6 @@ class AdminRequest extends FormRequest
     {
         $errors = $validator->errors()->toArray();
 
-        // resetFunction is get the first element form $errors Array.
         $response = [
           'statusCode'  => MessageConst::Bad_Request,
           'statusMessage' => reset($errors)[0]

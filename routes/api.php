@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Api\RegisterUserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\RegisterUserController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -25,9 +24,16 @@ Route::middleware('api')->group(function () {
   Route::controller(RegisterUserController::class)->group(function (){
       Route::post('/RegisterUser', 'post');
   });
+  //LoginController
+  Route::controller(LoginController::class)->group(function () {
+      Route::post('/login', 'login');
+  });
 
   //After Login action
-  Route::middleware('auth:sanctum')->group(function () {
-  });
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::controller(LogoutController::class)->group(function () {
+            Route::get('/logout', 'get');
+        });
+    });
 
 });
