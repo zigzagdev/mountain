@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Consts\Api\MessageConst;
-use App\Http\Resources\Api\LoginResource;
-use App\Http\Resources\Api\RegisterUserResource;
-use App\Http\Resources\Api\SuccessResource;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\PersonalAccessToken;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\LoginRequest;
+use App\Http\Resources\Api\AdminLoginResource;
 use App\Http\Resources\Api\ErrorResource;
-use App\Models\Admin;
+use App\Models\Api\AdminToken;
+use App\Services\TokenMakeService;
+use App\Models\Api\Admin;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 
 class LoginController extends Controller
@@ -23,24 +22,25 @@ class LoginController extends Controller
         try {
             $loginUser = Admin::where('address', $request->address)->first();
             if (empty($loginUser)) {
-                $request->merge(['statusMessage' =>
-                    sprintf(MessageConst::Bad_Request, 'メールアドレスかパスワードが間違っています。'
-                    )]);
+                $request->merge(['statusMessage' => 'メールアドレスかパスワードが違います。']);
                 return new ErrorResource($request);
             }
-            if (!Hash::check($request->password, $loginUser->password)) {
-                $request->merge(['statusMessage' =>
-                    sprintf(MessageConst::Bad_Request, 'メールアドレスかパスワードが間違っています。'
-                    )]);
+            $password = $request->password;
+            // パスワードをハッシュ化
+            if (!Hash::check($password, $loginUser->password) ) {
+                $request->merge(['statusMessage' => 'メールアドレスかパスワードが違います。']);
+                var_dump($loginUser->password);
+                var_dump($password);
                 return new ErrorResource($request);
             }
             DB::beginTransaction();
-            $loginUser->tokens()->delete();
-            $token = $loginUser->createToken("login:user{$loginUser->id}")->plainTextToken;
-            $request->merge(['adminToken' => $token]);
+
+            //トークン生成
+            $token = TokenMakeService::createToken($loginUser->id);
 
             DB::commit();
-            return new RegisterUserResource($request);
+            $request->merge(['adminToken' => $token]);
+            return new AdminLoginResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "ログインに失敗致しました。"]);
