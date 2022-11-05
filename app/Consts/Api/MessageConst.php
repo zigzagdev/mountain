@@ -28,7 +28,7 @@ class MessageConst
     public const HTTP_Version_Not_Supported = 505;
     public const Not_Extended = 510;
 
-    // Times Add for Carbon
+    // Times Add for using Carbon
     public const second = 60;
     public const Month = 30;
 }
