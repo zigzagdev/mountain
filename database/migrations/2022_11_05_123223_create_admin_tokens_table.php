@@ -14,10 +14,10 @@ class CreateAdminTokensTable extends Migration
     public function up()
     {
         Schema::create('admin_tokens', function (Blueprint $table) {
-            $table->binary('token')->nullable();
+            $table->string('token')->nullable();
             $table->unsignedBigInteger('admin_id')->comment('adminId');
             $table->foreign('admin_id')->references('id')->on('admins')->onUpdate('CASCADE')->onDelete('CASCADE');
-            $table->unsignedTinyInteger('expired_at');
+            $table->timestamp('expired_at');
             $table->timestamps();
         });
     }
