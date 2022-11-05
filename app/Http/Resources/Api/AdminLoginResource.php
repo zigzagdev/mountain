@@ -17,7 +17,7 @@ class AdminLoginResource extends JsonResource
         return  [
             'statusCode' => '200',
             'statusMessage' => 'OK',
-            'userToken' => $this->token
+            'adminToken' => $this->adminToken
         ];
     }
 }
