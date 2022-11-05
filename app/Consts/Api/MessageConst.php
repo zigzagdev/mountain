@@ -33,4 +33,3 @@ class MessageConst
     public const Month = 30;
 }
 
-
