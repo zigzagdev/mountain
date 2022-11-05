@@ -48,7 +48,7 @@ class AdminRequest extends FormRequest
         ];
     }
 
-    public function errormessage()
+    public function errorMessages()
     {
         return [
             'required' => ':attributeは入力必須となっております。',
@@ -66,7 +66,7 @@ class AdminRequest extends FormRequest
 
     public function messages()
     {
-        $message = $this->errormessage();
+        $message = $this->errorMessages();
         return  [
             //nickName
             "nickName.required" => $message['required'],
