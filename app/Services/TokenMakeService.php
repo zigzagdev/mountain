@@ -9,7 +9,7 @@ class TokenMakeService
 {
     public static function createToken($loginUserId)
     {
-        // Updating the expiration is used for not mix the usable token.
+        // Updating the expiration is used for not coexisting  usable tokens.
         $expiration = AdminToken::where('admin_id', $loginUserId)->where('expired_at', '>', Carbon::now());
         if (!empty($expiration)) {
             AdminToken::where('admin_id', $loginUserId)->where('expired_at', '>', Carbon::now())->update([
