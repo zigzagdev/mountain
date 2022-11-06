@@ -13,7 +13,7 @@ class ArticleRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return  false;
     }
 
     /**
@@ -24,7 +24,11 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            "nickName" => "required|max:255|regex:/^[A-Za-z\d_\-]+$/",
+            "password" => "required|max:100|regex:/^[A-Za-z\d_\-]+$/",
+            "address" => "required|max:100|unique:admins|email",
+            "age" => "required|integer|between:10,120",
+            "sex" => "required|integer|between:0,2",
         ];
     }
 }
