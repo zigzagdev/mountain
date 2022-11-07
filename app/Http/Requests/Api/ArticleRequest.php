@@ -13,7 +13,7 @@ class ArticleRequest extends FormRequest
      */
     public function authorize()
     {
-        return  false;
+        return  true;
     }
 
     /**
@@ -31,4 +31,24 @@ class ArticleRequest extends FormRequest
             "sex" => "required|integer|between:0,2",
         ];
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
