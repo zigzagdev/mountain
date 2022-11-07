@@ -91,5 +91,4 @@ class ArticleRequest extends FormRequest
         );
     }
 
-
 }
