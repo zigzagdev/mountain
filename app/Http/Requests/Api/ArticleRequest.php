@@ -36,5 +36,4 @@ class ArticleRequest extends FormRequest
 
 
 
-
 }
