@@ -51,4 +51,3 @@ class RegisterArticleController extends Controller
 
 
 
-
