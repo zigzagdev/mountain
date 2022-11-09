@@ -29,6 +29,8 @@ Route::middleware('api')->group(function () {
       Route::post('/login', 'login');
   });
 
+
+
   //After Login action
     Route::middleware('auth:sanctum')->group(function () {
         Route::controller(LogoutController::class)->group(function () {
