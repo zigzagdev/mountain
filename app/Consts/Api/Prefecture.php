@@ -51,4 +51,3 @@ const Prefecture = array(
     '46'=>'鹿児島県',
     '47'=>'沖縄県'
 );
-
