@@ -58,6 +58,3 @@ const Prefecture = array(
 
 
 
-
-
-
