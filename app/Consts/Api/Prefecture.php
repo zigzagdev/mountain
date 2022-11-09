@@ -52,5 +52,3 @@ const Prefecture = array(
     '47'=>'沖縄県'
 );
 
-
-
