@@ -30,4 +30,3 @@ class AddSoftDeleteColumnsToArticles extends Migration
 
 
 
-
