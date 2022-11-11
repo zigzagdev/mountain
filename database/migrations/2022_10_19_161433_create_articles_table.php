@@ -15,8 +15,8 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('admin_id')->comment('adminId');
-            $table->foreign('admin_id')->references('id')->on('admins')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->unsignedBigInteger('adminId')->comment('adminId');
+            $table->foreign('adminId')->references('id')->on('admins')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->timestamps();
         });
     }
