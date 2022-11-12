@@ -18,4 +18,3 @@ class Article extends Model
         $selectArticle = Article::get('deleted_at', '<', Carbon::now());
     }
 }
-
