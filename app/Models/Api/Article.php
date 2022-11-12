@@ -26,5 +26,3 @@ class Article extends Model
 
 
 
-
-
