@@ -19,4 +19,3 @@ class Article extends Model
     }
 }
 
-
