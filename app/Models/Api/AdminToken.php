@@ -5,13 +5,13 @@ namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use TheSeer\Tokenizer\Token;
 
 class AdminToken extends Model
 {
     protected $table = 'admin_tokens';
     protected $fillable = [
         'token',
-        'admin_id',
         'expired_at'
     ];
 
@@ -27,4 +27,5 @@ class AdminToken extends Model
     {
         return self::where('token', $token)->exists();
     }
+
 }
