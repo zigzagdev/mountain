@@ -37,4 +37,3 @@ class RegisterArticleResource extends JsonResource
 
 
 
-
