@@ -28,6 +28,12 @@ class RegisterUserTest extends TestCase
                 ]
             ]);
 
+        // Success registerUser at here.
+        $this->json('POST', 'api/RegisterUser')
+            ->assertStatus(201)
+            ->assertJson([
+                "message" => "User was created successfully",
+            ]);
 
     }
 }
