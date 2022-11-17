@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
 {
-    protected $guarded = ['id', 'adminId'];
+    protected $guarded = ['id'];
     protected $dates = ['deleted_at'];
     use SoftDeletes;
 
@@ -16,5 +16,7 @@ class Article extends Model
     public function selectedArticle()
     {
         $selectArticle = Article::get('deleted_at', '<', Carbon::now());
+
+        return $selectArticle;
     }
 }

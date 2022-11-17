@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ErrorResource extends JsonResource
 {
