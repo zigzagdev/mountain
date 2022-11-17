@@ -33,5 +33,3 @@ class RegisterArticleResource extends JsonResource
         ];
     }
 }
-
-
