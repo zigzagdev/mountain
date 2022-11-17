@@ -29,7 +29,7 @@ class ArticleRequest extends FormRequest
         return [
             "title" => "required|max:255|min:5|string",
             "content" => "required|max:1000|min:10|string",
-            "prefecture" => "between:0, 46|required",
+            "prefecture" => "between:1, 47|required",
         ];
     }
 
@@ -73,13 +73,14 @@ class ArticleRequest extends FormRequest
 
             //prefecture
             "prefecture.required" => $message['required'],
-            "prefecture.between" => sprintf($message['between'], 0, 46),
+            "prefecture.between" => sprintf($message['between'], 1, 47),
         ];
     }
 
 
     protected function failedValidation(validator $validator)
     {
+        dd($validator);
         $errors = $validator->errors()->toArray();
 
         $response = [
