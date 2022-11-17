@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Api\RegisterUserController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -29,13 +29,15 @@ Route::middleware('api')->group(function () {
       Route::post('/login', 'login');
   });
 
-
-
   //After Login action
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth.adminToken')->group(function () {
         Route::controller(LogoutController::class)->group(function () {
             Route::get('/logout', 'get');
         });
+        Route::controller(ArticleController::class)->group(function () {
+            Route::post('/articleWrite', 'articleWrite');
+            Route::put('/articleReWrite', 'articleReWrite');
+        });
     });
-
 });
+
