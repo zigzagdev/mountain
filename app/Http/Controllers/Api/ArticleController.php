@@ -20,7 +20,8 @@ use Carbon\Carbon;
 class ArticleController extends Controller
 {
     // 記事投稿
-    public function articleWrite(ArticleRequest $request){
+    public function articleWrite(ArticleRequest $request)
+    {
         try {
             $adminId = $request->adminId;
 
