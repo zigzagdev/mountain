@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Consts\Api\MessageConst;
+use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Resources\Api\AdminLoginResource;
@@ -11,6 +12,7 @@ use App\Models\Api\AdminToken;
 use App\Services\TokenMakeService;
 use App\Models\Api\Admin;
 use Carbon\Carbon;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -22,29 +24,26 @@ class LoginController extends Controller
         try {
             $loginUser = Admin::where('address', $request->address)->first();
             if (empty($loginUser)) {
-                $request->merge(['statusMessage' => 'メールアドレスかパスワードが違います。']);
+                $request->merge(['statusMessage' => CommonConst::ERR_01]);
                 return new ErrorResource($request);
             }
             $password = $request->password;
             // パスワードをハッシュ化
             if (!Hash::check($password, $loginUser->password) ) {
-                $request->merge(['statusMessage' => 'メールアドレスかパスワードが違います。']);
-                var_dump($loginUser->password);
-                var_dump($password);
+                $request->merge(['statusMessage' => CommonConst::ERR_01]);
                 return new ErrorResource($request);
             }
             DB::beginTransaction();
 
             //トークン生成
             $token = TokenMakeService::createToken($loginUser->id);
-
             DB::commit();
-            $request->merge(['adminToken' => $token]);
+            $request->merge(['adminToken' => $token, 'adminId' => $loginUser->id]);
             return new AdminLoginResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "ログインに失敗致しました。"]);
-            return new ErrorResource($request, MessageConst::Unauthorized);
+            $request->merge(['statusMessage' => CommonConst::ERR_01]);
+            return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
 }
