@@ -9,7 +9,6 @@ use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\ErrorResource;
 use App\Http\Requests\Api\ArticleRequest;
-use App\Http\Resources\Api\RegisterArticleCollection;
 use App\Models\Api\Article;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +37,7 @@ class ArticleController extends Controller
                 'statusMessage' => MessageConst::OK,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+                'rate' => intval($request->input('rate')),
                 'adminId' => $adminId,
             ]);
             return new RegisterArticleResource($request);
