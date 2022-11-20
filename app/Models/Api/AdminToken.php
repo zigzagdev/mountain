@@ -12,7 +12,8 @@ class AdminToken extends Model
     protected $table = 'admin_tokens';
     protected $fillable = [
         'token',
-        'expired_at'
+        'expired_at',
+        'admin_id'
     ];
 
     public static function createToken()
