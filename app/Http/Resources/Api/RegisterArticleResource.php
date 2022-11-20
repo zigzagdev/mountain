@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api;
 
+use App\Consts\Api\Prefecture;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,7 +29,8 @@ class RegisterArticleResource extends JsonResource
             'articleDetail' => [
                 'title' => $this->title,
                 'content' => Str::limit($this->content, 15, '...'),
-                'prefecture' => $this->prefecture
+                'prefecture' => Prefecture::eachPrefecture[$this->prefecture],
+                'rating' => $this->rate,
             ]
         ];
     }
