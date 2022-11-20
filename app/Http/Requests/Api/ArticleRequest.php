@@ -30,6 +30,7 @@ class ArticleRequest extends FormRequest
             "title" => "required|max:255|min:5|string",
             "content" => "required|max:1000|min:10|string",
             "prefecture" => "between:1, 47|required",
+            "rating" => "between:0, 5|integer",
         ];
     }
 
@@ -39,7 +40,7 @@ class ArticleRequest extends FormRequest
             'title' => 'タイトル',
             'content' => '投稿内容',
             'prefecture' => '都道府県',
-
+            'rating' => 'レーティング'
         ];
     }
 
@@ -74,13 +75,16 @@ class ArticleRequest extends FormRequest
             //prefecture
             "prefecture.required" => $message['required'],
             "prefecture.between" => sprintf($message['between'], 1, 47),
+
+            //rating
+            "rating.between" => sprintf($message['between'], 0, 5),
+            "rating.integer" => $message['integer']
         ];
     }
 
 
     protected function failedValidation(validator $validator)
     {
-        dd($validator);
         $errors = $validator->errors()->toArray();
 
         $response = [
