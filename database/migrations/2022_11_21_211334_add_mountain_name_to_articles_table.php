@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRatingToArticlesTable extends Migration
+class AddMountainNameToArticlesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class AddRatingToArticlesTable extends Migration
     public function up()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->integer('rate');
+            $table->string('mountainName', 100);
         });
     }
 
@@ -26,7 +26,7 @@ class AddRatingToArticlesTable extends Migration
     public function down()
     {
         Schema::table('articles', function (Blueprint $table) {
-            $table->dropColumn('rate');
+            $table->dropColumn('mountainName');
         });
     }
 }

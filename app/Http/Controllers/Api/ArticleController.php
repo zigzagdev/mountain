@@ -38,6 +38,7 @@ class ArticleController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
                 'rate' => intval($request->input('rate')),
+                'mountainName' => $request->input('mountainName'),
                 'adminId' => $adminId,
             ]);
             return new RegisterArticleResource($request);
