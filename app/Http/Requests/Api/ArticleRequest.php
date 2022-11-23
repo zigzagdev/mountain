@@ -27,11 +27,11 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            "title" => "required|max:255|min:5|string",
-            "content" => "required|max:1000|min:10|string",
+            "title" => "required|min:5||max:255|string",
+            "content" => "required|min:5|max:1000|string",
             "prefecture" => "between:1, 47|required",
             "rate" => "between:0, 5|integer",
-            "mountainName" => "string|required|between:2, 100|"
+            "mountainName" => "string|required|between:4, 100|"
         ];
     }
 
@@ -63,14 +63,14 @@ class ArticleRequest extends FormRequest
         return  [
             //title
             "title.required" => $message['required'],
-            "title.max" => sprintf($message['max'], 255),
             "title.min" => sprintf($message['min'], 5),
+            "title.max" => sprintf($message['max'], 255),
             "title.string" => $message['string'],
 
             //content
             "content.required" => $message['required'],
-            "content.max" => sprintf($message['max'], 255),
             "content.min" => sprintf($message['min'], 5),
+            "content.max" => sprintf($message['max'], 1000),
             "content.string" => $message['string'],
 
             //prefecture
@@ -82,9 +82,9 @@ class ArticleRequest extends FormRequest
             "rate.integer" => $message['integer'],
 
             //mountainName
-            "mountainName" => $message['required'],
-            "mountainName" => sprintf($message['between'], 2, 100),
-            "mountainName" => $message['string'],
+            "mountainName.required" => $message['required'],
+            "mountainName.between" => sprintf($message['between'], 2, 100),
+            "mountainName.string" => $message['string'],
         ];
     }
 
