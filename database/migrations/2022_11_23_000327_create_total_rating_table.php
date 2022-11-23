@@ -14,8 +14,8 @@ class CreateTotalRatingTable extends Migration
     public function up()
     {
         Schema::create('total_rating', function (Blueprint $table) {
-            $table->string('mountainRate', 100);
-            $table->integer('mountainName');
+            $table->string('mountainName', 100);
+            $table->integer('mountainRate');
             $table->unsignedBigInteger('admin_id')->comment('adminId');
             $table->timestamps();
             $table->foreign('admin_id')->references('adminId')->on('articles')->onUpdate('CASCADE')->onDelete('CASCADE');
