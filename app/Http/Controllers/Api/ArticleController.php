@@ -38,15 +38,15 @@ class ArticleController extends Controller
                 'statusMessage' => MessageConst::OK,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'rate' => intval($request->input('rate')),
+                'mountainRate' => intval($request->input('mountainRate')),
                 'mountainName' => $request->input('mountainName'),
                 'adminId' => $adminId,
             ]);
-//            var_dump($request->toArray());
-            if (!empty(intval($request->input('rate'))))
+
+            if (!empty(intval($request->input('mountainRate'))))
                 MountainRating::firstOrCreate([
                     'admin_id' => $adminId,
-                    'mountainRate' => $request->input('rate'),
+                    'mountainRate' => $request->input('mountainRate'),
                     'mountainName' => $request->input('mountainName')
                 ]);
 

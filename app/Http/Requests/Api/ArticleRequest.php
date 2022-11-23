@@ -30,7 +30,7 @@ class ArticleRequest extends FormRequest
             "title" => "required|min:5||max:255|string",
             "content" => "required|min:5|max:1000|string",
             "prefecture" => "between:1, 47|required",
-            "rate" => "between:0, 5|integer",
+            "rate" => "between:0, 5",
             "mountainName" => "string|required|between:4, 100|"
         ];
     }
@@ -79,7 +79,6 @@ class ArticleRequest extends FormRequest
 
             //rating
             "rate.between" => sprintf($message['between'], 0, 5),
-            "rate.integer" => $message['integer'],
 
             //mountainName
             "mountainName.required" => $message['required'],

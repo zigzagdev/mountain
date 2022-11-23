@@ -30,7 +30,7 @@ class RegisterArticleResource extends JsonResource
                 'title' => $this->title,
                 'content' => Str::limit($this->content, 15, '...'),
                 'prefecture' => Prefecture::eachPrefecture[$this->prefecture],
-                'rating' => $this->rate,
+                'mountainRating' => $this->mountainRate,
                 'mountainName' => $this->mountainName,
             ]
         ];
