@@ -10,6 +10,7 @@ class Article extends Model
 {
     protected $guarded = ['id'];
     protected $dates = ['deleted_at'];
+    protected $table = 'articles';
     use SoftDeletes;
 
 

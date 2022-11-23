@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\ErrorResource;
 use App\Http\Requests\Api\ArticleRequest;
 use App\Models\Api\Article;
+use App\Models\Api\MountainRating;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use App\Consts\Api\Prefecture;
@@ -41,6 +42,14 @@ class ArticleController extends Controller
                 'mountainName' => $request->input('mountainName'),
                 'adminId' => $adminId,
             ]);
+//            var_dump($request->toArray());
+            if (!empty(intval($request->input('rate'))))
+                MountainRating::firstOrCreate([
+                    'admin_id' => $adminId,
+                    'mountainRate' => $request->input('rate'),
+                    'mountainName' => $request->input('mountainName')
+                ]);
+
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
