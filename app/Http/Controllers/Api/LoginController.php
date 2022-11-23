@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Consts\Api\MessageConst;
+
 use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Resources\Api\AdminLoginResource;
 use App\Http\Resources\Api\ErrorResource;
-use App\Models\Api\AdminToken;
 use App\Services\TokenMakeService;
 use App\Models\Api\Admin;
 use Symfony\Component\HttpFoundation\Response;
@@ -42,7 +41,7 @@ class LoginController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => CommonConst::ERR_01]);
-            $statusMessage = $e->getMessage();
+
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
