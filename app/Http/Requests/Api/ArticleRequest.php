@@ -29,9 +29,9 @@ class ArticleRequest extends FormRequest
         return [
             "title" => "required|min:5||max:255|string",
             "content" => "required|min:5|max:1000|string",
-            "prefecture" => "between:1, 47|required",
-            "rate" => "between:0, 5",
-            "mountainName" => "string|required|between:4, 100|"
+            "prefecture" => "between:1,47|required",
+            "mountainRate" => "between:0,5|integer|nullable",
+            "mountainName" => "string|required|between:4,100|"
         ];
     }
 
@@ -41,7 +41,8 @@ class ArticleRequest extends FormRequest
             'title' => 'タイトル',
             'content' => '投稿内容',
             'prefecture' => '都道府県',
-            'rate' => 'レーティング'
+            'mountainRate' => 'レーティング',
+            'mountainName' => '山の名前'
         ];
     }
 
@@ -77,8 +78,9 @@ class ArticleRequest extends FormRequest
             "prefecture.required" => $message['required'],
             "prefecture.between" => sprintf($message['between'], 1, 47),
 
-            //rating
-            "rate.between" => sprintf($message['between'], 0, 5),
+            //mountainRate
+            "mountainRate.between" => sprintf($message['between'], 0, 5),
+            "mountainRate.integer" => $message['integer'],
 
             //mountainName
             "mountainName.required" => $message['required'],
