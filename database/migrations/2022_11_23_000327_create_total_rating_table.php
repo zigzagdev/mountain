@@ -16,6 +16,7 @@ class CreateTotalRatingTable extends Migration
         Schema::create('total_rating', function (Blueprint $table) {
             $table->string('mountainName', 100);
             $table->integer('mountainRate');
+            $table->tinyInteger('prefecture')->comment('都道府県_コード番号');
             $table->unsignedBigInteger('admin_id')->comment('adminId');
             $table->timestamps();
             $table->foreign('admin_id')->references('adminId')->on('articles')->onUpdate('CASCADE')->onDelete('CASCADE');

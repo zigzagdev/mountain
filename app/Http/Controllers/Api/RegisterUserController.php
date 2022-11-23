@@ -9,6 +9,7 @@ use App\Http\Resources\Api\ErrorResource;
 use App\Http\Resources\Api\RegisterUserResource;
 use App\Mail\Api\RegisterSuccessMail;
 use App\Models\Api\Admin;
+use App\Services\TokenMakeService;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -45,6 +46,8 @@ class RegisterUserController extends Controller
 //
 //            Mail::to($address)->send(new RegisterSuccessMail($nickName));
 
+            $token = TokenMakeService::createToken($admin->id);
+            $request->merge(['token' => $token]);
             DB::commit();
             return new RegisterUserResource($request);
 
