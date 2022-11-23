@@ -30,8 +30,8 @@ class ArticleRequest extends FormRequest
             "title" => "required|min:5||max:255|string",
             "content" => "required|min:5|max:1000|string",
             "prefecture" => "between:1,47|required",
-            "mountainRate" => "between:0,5|integer|nullable",
-            "mountainName" => "string|required|between:4,100|"
+            "mountainRate" => "between:1,5|numeric|nullable",
+            "mountainName" => "string|required|min:4|max:100|"
         ];
     }
 
@@ -51,7 +51,7 @@ class ArticleRequest extends FormRequest
         return [
             'required' => ':attributeは入力必須となっております。',
             'string' => ':attributeの値が不正です。',
-            'integer' => ':attributeの値が不正です。',
+            'numeric' => ':attributeの値が不正です。',
             'min' => ':attributeの値は%d文字以上の入力が必要です。',
             'max' => ':attributeの値は%d文字以下の入力が必要です。',
             'between' => ':attributeは%dから%dの間の数字で入力してください。',
@@ -79,12 +79,13 @@ class ArticleRequest extends FormRequest
             "prefecture.between" => sprintf($message['between'], 1, 47),
 
             //mountainRate
-            "mountainRate.between" => sprintf($message['between'], 0, 5),
-            "mountainRate.integer" => $message['integer'],
+            "mountainRate.between" => sprintf($message['between'], 1, 5),
+            "mountainRate.numeric" => $message['numeric'],
 
             //mountainName
             "mountainName.required" => $message['required'],
-            "mountainName.between" => sprintf($message['between'], 2, 100),
+            "mountainName.min" => sprintf($message['min'], 5),
+            "mountainName.max" => sprintf($message['max'], 1000),
             "mountainName.string" => $message['string'],
         ];
     }

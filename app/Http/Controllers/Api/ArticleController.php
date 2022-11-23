@@ -38,16 +38,18 @@ class ArticleController extends Controller
                 'statusMessage' => MessageConst::OK,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'mountainRate' => intval($request->input('mountainRate')),
+                'mountainRate' => $request->input('mountainRate'),
                 'mountainName' => $request->input('mountainName'),
                 'adminId' => $adminId,
             ]);
 
-            if (!empty(intval($request->input('mountainRate'))))
+            // MountainRating Records are created .
+            if (!empty($request->input('mountainRate')))
                 MountainRating::firstOrCreate([
                     'admin_id' => $adminId,
                     'mountainRate' => $request->input('mountainRate'),
-                    'mountainName' => $request->input('mountainName')
+                    'mountainName' => $request->input('mountainName'),
+                    'prefecture' => $request->input('prefecture'),
                 ]);
 
             return new RegisterArticleResource($request);
