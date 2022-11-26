@@ -13,7 +13,10 @@ class DisplayController extends Controller
     {
         // In here, searching SQL is selected from here .
         $useSQL = Article::withoutTrashed();
-        $ratingRecords = $useSQL->where('mountainName', 'LIKE', '%' . $request->q . '%')->get();
+        $ratingRecords = $useSQL->where('mountainName', 'LIKE', '%' . $request->q . '%')
+            ->where('title', 'LIKE', '%' . $request->q . '%')
+            ->where('content', 'LIKE', '%' . $request->q . '%')
+            ->get();
 
         // using as a searchQueryResults .
         $arrRecords = $ratingRecords->toArray();
