@@ -16,7 +16,7 @@ class ArticleRequest extends FormRequest
      */
     public function authorize()
     {
-        return  true;
+        return true;
     }
 
     /**
@@ -61,7 +61,7 @@ class ArticleRequest extends FormRequest
     public function messages()
     {
         $message = $this->errorMessages();
-        return  [
+        return [
             //title
             "title.required" => $message['required'],
             "title.min" => sprintf($message['min'], 5),
@@ -96,12 +96,11 @@ class ArticleRequest extends FormRequest
         $errors = $validator->errors()->toArray();
 
         $response = [
-            'statusCode'  => MessageConst::Bad_Request,
+            'statusCode' => MessageConst::Bad_Request,
             'statusMessage' => reset($errors)[0]
         ];
         throw new HttpResponseException(
             response()->json($response, MessageConst::Bad_Request)
         );
     }
-
 }

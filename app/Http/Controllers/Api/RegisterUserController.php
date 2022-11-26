@@ -10,6 +10,7 @@ use App\Http\Resources\Api\RegisterUserResource;
 use App\Mail\Api\RegisterSuccessMail;
 use App\Models\Api\Admin;
 use App\Services\TokenMakeService;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -54,7 +55,7 @@ class RegisterUserController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "会員情報の登録に失敗致しました。"]);
-            return new ErrorResource($request, MessageConst::Not_Acceptable);
+            return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
 
