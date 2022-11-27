@@ -24,9 +24,14 @@ Route::middleware('api')->group(function () {
   Route::controller(RegisterUserController::class)->group(function (){
       Route::post('/registerUser', 'post');
   });
-    Route::controller(DisplayController::class)->group(function (){
-        Route::get('/topSearch', 'ratingDisplay');
-    });
+  Route::controller(DisplayController::class)->group(function (){
+      Route::get('/topSearch', 'ratingDisplay');
+  });
+
+  Route::controller(CommentController::class)->group(function (){
+      Route::post('/commentC', 'makeComment');
+  });
+
   //LoginController
   Route::controller(LoginController::class)->group(function () {
       Route::post('/login', 'login');
