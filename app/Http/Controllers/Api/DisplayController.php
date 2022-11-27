@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Api\Article;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use App\Http\Resources\Api\RatingDisplayResource;
 
 class DisplayController extends Controller
 {
@@ -13,9 +14,10 @@ class DisplayController extends Controller
     {
         // In here, searching SQL is selected from here .
         $useSQL = Article::withoutTrashed();
-        $ratingRecords = $useSQL->where('mountainName', 'LIKE', '%' . $request->q . '%')
-            ->where('title', 'LIKE', '%' . $request->q . '%')
-            ->where('content', 'LIKE', '%' . $request->q . '%')
+        $keyword = $request->keyword;
+        $ratingRecords = $useSQL->where('mountainName', 'LIKE', '%' . $keyword . '%')
+            ->orWhere('title', 'LIKE', '%' . $keyword . '%')
+            ->orWhere('content', 'LIKE', '%' . $keyword . '%')
             ->get();
 
         // using as a searchQueryResults .
@@ -36,25 +38,21 @@ class DisplayController extends Controller
         }
         $count = count($pushArray);
         $reviews = [];
-        $sums = [];
-
+print_r($pushArray);
         // making a new array which has a total rating and how many rating it has.
         $totalRatingScore = $pushArray[0]['mountainRate'];
         $dividedRecord = 1;
         for ($i = 1; $i <= $count - 1; $i++) {
             if (intval($pushArray[$i - 1]['prefecture']) === intval($pushArray[$i]['prefecture'])) {
-
                 $totalRatingScore += intval($pushArray[$i]['mountainRate']);
                 $dividedRecord += 1;
             } else {
-                array_push($sums, $totalRatingScore, $dividedRecord);
+                array_push($reviews, array($totalRatingScore, $dividedRecord));
                 $totalRatingScore = $pushArray[$i]['mountainRate'];
                 $dividedRecord = 1;
-                array_push($reviews, $sums);
-                $sums = [];
             }
         }
-
+print_r($reviews);
         $avg = [];
         foreach ($reviews as $key => $value) {
             $score = $value['0'] / $value['1'];
@@ -62,7 +60,6 @@ class DisplayController extends Controller
             array_push($avg, $goalRating);
         }
         return $avg;
+//        return new RatingDisplayResource($avg);
     }
 }
-
-
