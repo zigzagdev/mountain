@@ -52,8 +52,8 @@ class ArticleRequest extends FormRequest
             'required' => ':attributeは入力必須となっております。',
             'string' => ':attributeの値が不正です。',
             'numeric' => ':attributeの値が不正です。',
-            'min' => ':attributeの値は%d文字以上の入力が必要です。',
-            'max' => ':attributeの値は%d文字以下の入力が必要です。',
+            'min' => ':attributeの値は%d文字以上の文字数が必要です。',
+            'max' => ':attributeの値は%d文字以下の文字数でお願いします。',
             'between' => ':attributeは%dから%dの間の数字で入力してください。',
         ];
     }
