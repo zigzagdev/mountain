@@ -22,8 +22,11 @@ Route::middleware('api')->group(function () {
 
   //RegisterUserController
   Route::controller(RegisterUserController::class)->group(function (){
-      Route::post('/RegisterUser', 'post');
+      Route::post('/registerUser', 'post');
   });
+    Route::controller(DisplayController::class)->group(function (){
+        Route::get('/topSearch', 'ratingDisplay');
+    });
   //LoginController
   Route::controller(LoginController::class)->group(function () {
       Route::post('/login', 'login');

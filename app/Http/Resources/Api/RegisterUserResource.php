@@ -22,7 +22,8 @@ class RegisterUserResource extends JsonResource
     {
         return [
           'statusCode' => $this->statusCode,
-          'statusMessage' => 'OK'
+          'statusMessage' => 'OK',
+          'userToken' => $this->token,
         ];
     }
 }

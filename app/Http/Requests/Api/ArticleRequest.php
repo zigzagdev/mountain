@@ -16,7 +16,7 @@ class ArticleRequest extends FormRequest
      */
     public function authorize()
     {
-        return  true;
+        return true;
     }
 
     /**
@@ -27,9 +27,11 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            "title" => "required|max:255|min:5|string",
-            "content" => "required|max:1000|min:10|string",
-            "prefecture" => "between:1, 47|required",
+            "title" => "required|min:5||max:255|string",
+            "content" => "required|min:5|max:1000|string",
+            "prefecture" => "between:1,47|required",
+            "mountainRate" => "between:1,5|numeric|nullable",
+            "mountainName" => "string|required|min:4|max:100|"
         ];
     }
 
@@ -39,7 +41,8 @@ class ArticleRequest extends FormRequest
             'title' => 'タイトル',
             'content' => '投稿内容',
             'prefecture' => '都道府県',
-
+            'mountainRate' => 'レーティング',
+            'mountainName' => '山の名前'
         ];
     }
 
@@ -48,7 +51,7 @@ class ArticleRequest extends FormRequest
         return [
             'required' => ':attributeは入力必須となっております。',
             'string' => ':attributeの値が不正です。',
-            'integer' => ':attributeの値が不正です。',
+            'numeric' => ':attributeの値が不正です。',
             'min' => ':attributeの値は%d文字以上の入力が必要です。',
             'max' => ':attributeの値は%d文字以下の入力が必要です。',
             'between' => ':attributeは%dから%dの間の数字で入力してください。',
@@ -58,38 +61,46 @@ class ArticleRequest extends FormRequest
     public function messages()
     {
         $message = $this->errorMessages();
-        return  [
+        return [
             //title
             "title.required" => $message['required'],
-            "nickName.max" => sprintf($message['max'], 255),
-            "nickName.min" => sprintf($message['min'], 5),
+            "title.min" => sprintf($message['min'], 5),
+            "title.max" => sprintf($message['max'], 255),
             "title.string" => $message['string'],
 
             //content
             "content.required" => $message['required'],
-            "content.max" => sprintf($message['max'], 255),
             "content.min" => sprintf($message['min'], 5),
+            "content.max" => sprintf($message['max'], 1000),
             "content.string" => $message['string'],
 
             //prefecture
             "prefecture.required" => $message['required'],
             "prefecture.between" => sprintf($message['between'], 1, 47),
+
+            //mountainRate
+            "mountainRate.between" => sprintf($message['between'], 1, 5),
+            "mountainRate.numeric" => $message['numeric'],
+
+            //mountainName
+            "mountainName.required" => $message['required'],
+            "mountainName.min" => sprintf($message['min'], 5),
+            "mountainName.max" => sprintf($message['max'], 1000),
+            "mountainName.string" => $message['string'],
         ];
     }
 
 
     protected function failedValidation(validator $validator)
     {
-        dd($validator);
         $errors = $validator->errors()->toArray();
 
         $response = [
-            'statusCode'  => MessageConst::Bad_Request,
+            'statusCode' => MessageConst::Bad_Request,
             'statusMessage' => reset($errors)[0]
         ];
         throw new HttpResponseException(
             response()->json($response, MessageConst::Bad_Request)
         );
     }
-
 }

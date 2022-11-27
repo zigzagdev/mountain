@@ -9,8 +9,8 @@ use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\ErrorResource;
 use App\Http\Requests\Api\ArticleRequest;
-use App\Http\Resources\Api\RegisterArticleCollection;
 use App\Models\Api\Article;
+use App\Models\Api\MountainRating;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use App\Consts\Api\Prefecture;
@@ -38,8 +38,20 @@ class ArticleController extends Controller
                 'statusMessage' => MessageConst::OK,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
+                'mountainRate' => $request->input('mountainRate'),
+                'mountainName' => $request->input('mountainName'),
                 'adminId' => $adminId,
             ]);
+
+            // MountainRating Records are created .
+            if (!empty($request->input('mountainRate')))
+                MountainRating::firstOrCreate([
+                    'admin_id' => $adminId,
+                    'mountainRate' => $request->input('mountainRate'),
+                    'mountainName' => $request->input('mountainName'),
+                    'prefecture' => $request->input('prefecture'),
+                ]);
+
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
