@@ -14,4 +14,13 @@ class CommentController extends Controller
 
         }
     }
+
+    public function changeComment () {
+        try {
+
+        } catch (\Exception $e) {
+
+        }
+
+    }
 }
