@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Api;
 
-use http\Env\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
 class RatingDisplayCollection extends ResourceCollection
@@ -16,9 +16,9 @@ class RatingDisplayCollection extends ResourceCollection
     public function toArray($request)
     {
         return [
-            'statusCode' => \Symfony\Component\HttpFoundation\Response::HTTP_OK,
+            'statusCode' => Response::HTTP_OK,
             'statusMessage' => 'OK',
-            'ratingList' => $this->collection->map( function ($item) {
+            'ratingList' => $this->collection->map(function ($item) {
                 return [
                     'averageRating' => $item['0'],
                     'mountainName' => $item['1'],
