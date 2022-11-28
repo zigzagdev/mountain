@@ -49,7 +49,7 @@ class DisplayController extends Controller
             if (intval($pushArray[$i - 1]['prefecture']) === intval($pushArray[$i]['prefecture'])) {
                 $totalRatingScore += intval($pushArray[$i]['mountainRate']);
                 $dividedRecord += 1;
-                $mountainName =  $pushArray[$i]['mountainName'];
+                $mountainName = $pushArray[$i]['mountainName'];
                 $prefecture = $pushArray[$i]['prefecture'];
             } else {
                 array_push($reviews, array($totalRatingScore, $dividedRecord, $mountainName, $prefecture));
@@ -70,7 +70,6 @@ class DisplayController extends Controller
             ]);
         }
 
-return $avg;
-//        return new RatingDisplayCollection($avg);
+        return new RatingDisplayCollection($avg);
     }
 }
