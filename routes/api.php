@@ -32,10 +32,8 @@ Route::middleware('api')->group(function () {
 
   //CommentController
   Route::controller(CommentController::class)->group(function (){
-      Route::post('/commentC', 'makeComment');
-  });
-  Route::controller(CommentController::class)->group(function (){
-      Route::post('/commentC', 'makeComment');
+      Route::post('/commentCreate', 'makeComment');
+      Route::put('/changeComment', 'changeComment');
   });
 
   //LoginController

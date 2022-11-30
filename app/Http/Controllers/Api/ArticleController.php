@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use App\Consts\Api\Prefecture;
 use Carbon\Carbon;
+use Illuminate\Http\Client\Request;
 
 
 class ArticleController extends Controller
@@ -56,22 +57,20 @@ class ArticleController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "記事の投稿に失敗致しました。"]);
-            $statusMessage = $e->getMessage();
-            var_dump($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
 
-
-    // softDelete is needed ??
-
     //記事編集
-//    public function articleReWrite($adminId, ArticleRequest $request)
-//    {
-//        try {
-//
-//        } catch (\Exception $e) {
-//
-//        }
-//    }
+    public function articleReWrite(Request $request)
+    {
+        try {
+            var_dump($request->toArray());
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $request->merge(['statusMessage' => "記事の上書きに失敗致しました。"]);
+            return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
