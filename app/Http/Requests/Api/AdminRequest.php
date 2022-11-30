@@ -57,8 +57,8 @@ class AdminRequest extends FormRequest
             'date' => ':attributeには日付のみ入力可能です。',
             'email' => 'メールアドレスの形式が正しくありません。',
             'unique' => ':attributeは既に使用されています。',
-            'min' => ':attributeの値は%d文字以上の入力が必要です。',
-            'max' => ':attributeの値は%d文字以下の入力が必要です。',
+            'min' => ':attributeの値は%d文字以上の文字数が必要です。',
+            'max' => ':attributeの値は%d文字以下の文字数でお願いします。',
             'between' => ':attributeは%dから%dの間の数字で入力してください。',
             'regex' => ':attributeは半角英数字のみ有効となっております。'
         ];

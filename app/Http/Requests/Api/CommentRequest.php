@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class ArticleRequest extends FormRequest
+class CommentRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,22 +27,16 @@ class ArticleRequest extends FormRequest
     public function rules()
     {
         return [
-            "title" => "required|min:5||max:255|string",
-            "content" => "required|min:5|max:1000|string",
-            "prefecture" => "between:1,47|required",
-            "mountainRate" => "between:1,5|numeric|nullable",
-            "mountainName" => "string|required|min:4|max:100|"
+            "name" => "required|min:5||max:30|string",
+            "content" => "required|min:5|max:255|string",
         ];
     }
 
     public function attributes()
     {
         return [
-            'title' => 'タイトル',
+            'name' => 'コメント投稿者名',
             'content' => '投稿内容',
-            'prefecture' => '都道府県',
-            'mountainRate' => 'レーティング',
-            'mountainName' => '山の名前'
         ];
     }
 
@@ -51,7 +45,6 @@ class ArticleRequest extends FormRequest
         return [
             'required' => ':attributeは入力必須となっております。',
             'string' => ':attributeの値が不正です。',
-            'numeric' => ':attributeの値が不正です。',
             'min' => ':attributeの値は%d文字以上の文字数が必要です。',
             'max' => ':attributeの値は%d文字以下の文字数でお願いします。',
             'between' => ':attributeは%dから%dの間の数字で入力してください。',
@@ -62,31 +55,17 @@ class ArticleRequest extends FormRequest
     {
         $message = $this->errorMessages();
         return [
-            //title
-            "title.required" => $message['required'],
-            "title.min" => sprintf($message['min'], 5),
-            "title.max" => sprintf($message['max'], 255),
-            "title.string" => $message['string'],
+            //name
+            "name.required" => $message['required'],
+            "name.min" => sprintf($message['min'], 5),
+            "name.max" => sprintf($message['max'], 255),
+            "name.string" => $message['string'],
 
             //content
             "content.required" => $message['required'],
             "content.min" => sprintf($message['min'], 5),
             "content.max" => sprintf($message['max'], 1000),
             "content.string" => $message['string'],
-
-            //prefecture
-            "prefecture.required" => $message['required'],
-            "prefecture.between" => sprintf($message['between'], 1, 47),
-
-            //mountainRate
-            "mountainRate.between" => sprintf($message['between'], 1, 5),
-            "mountainRate.numeric" => $message['numeric'],
-
-            //mountainName
-            "mountainName.required" => $message['required'],
-            "mountainName.min" => sprintf($message['min'], 5),
-            "mountainName.max" => sprintf($message['max'], 1000),
-            "mountainName.string" => $message['string'],
         ];
     }
 

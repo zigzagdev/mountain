@@ -24,9 +24,18 @@ Route::middleware('api')->group(function () {
   Route::controller(RegisterUserController::class)->group(function (){
       Route::post('/registerUser', 'post');
   });
-    Route::controller(DisplayController::class)->group(function (){
-        Route::get('/topSearch', 'ratingDisplay');
-    });
+
+  // SearchQueryController
+  Route::controller(DisplayController::class)->group(function (){
+      Route::get('/topSearch', 'ratingDisplay');
+  });
+
+  //CommentController
+  Route::controller(CommentController::class)->group(function (){
+      Route::post('/commentCreate', 'makeComment');
+      Route::put('/changeComment', 'changeComment');
+  });
+
   //LoginController
   Route::controller(LoginController::class)->group(function () {
       Route::post('/login', 'login');
@@ -34,9 +43,13 @@ Route::middleware('api')->group(function () {
 
   //After Login action
     Route::middleware('auth.adminToken')->group(function () {
+
+        //LogoutController
         Route::controller(LogoutController::class)->group(function () {
             Route::get('/logout', 'get');
         });
+
+        //ArticleControllers
         Route::controller(ArticleController::class)->group(function () {
             Route::post('/articleWrite', 'articleWrite');
             Route::put('/articleReWrite', 'articleReWrite');
