@@ -54,6 +54,10 @@ Route::middleware('api')->group(function () {
             Route::post('/articleWrite', 'articleWrite');
             Route::put('/articleReWrite', 'articleReWrite');
         });
+        //NewsControllers
+        Route::controller(NewsMakingController::class)->group(function () {
+            Route::post('/newsMake', 'newsMake');
+        });
     });
 });
 

@@ -10,5 +10,4 @@ class MountainRating extends Model
     protected $table = 'total_rating';
     protected $guarded = [];
 
-
 }
