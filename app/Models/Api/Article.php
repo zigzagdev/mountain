@@ -13,11 +13,4 @@ class Article extends Model
     protected $table = 'articles';
     use SoftDeletes;
 
-
-    public function selectedArticle()
-    {
-        $selectArticle = Article::get('deleted_at', '<', Carbon::now());
-
-        return $selectArticle;
-    }
 }

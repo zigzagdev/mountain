@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Api;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
 class CommentTotalCollection extends ResourceCollection
@@ -22,7 +23,7 @@ class CommentTotalCollection extends ResourceCollection
                 return [
                     'id' => $item->id,
                     'name' => $item->name,
-                    'content' => $item->content
+                    'content' => Str::limit($this->content, 20, '...')
                 ];
             })
         ];

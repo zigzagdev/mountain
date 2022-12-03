@@ -31,10 +31,7 @@ class CommentController extends Controller
                 'content' => $request->input('content'),
                 'article_id' => $articleId,
             ]);
-
             $comments = Comment::where('article_id', $articleId)->get();
-
-            $comments->toArray();
 
             return new CommentTotalCollection($comments);
 
