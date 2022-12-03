@@ -27,9 +27,9 @@ class AdminRequest extends FormRequest
     public function rules()
     {
         return [
-            "nickName" => "required|max:255|regex:/^[A-Za-z\d_\-]+$/",
-            "password" => "required|max:100|regex:/^[A-Za-z\d_\-]+$/",
-            "address" => "required|max:100|unique:admins|email",
+            "nickName" => "required|min:4|max:50|regex:/^[A-Za-z\d_\-]+$/",
+            "password" => "required|min:8|max:255|regex:/^[A-Za-z\d_\-]+$/",
+            "address" => "required|max:255|unique:admins|email",
             "age" => "required|integer|between:10,120",
             "sex" => "required|integer|between:0,2",
         ];
@@ -70,10 +70,12 @@ class AdminRequest extends FormRequest
         return  [
             //nickName
             "nickName.required" => $message['required'],
-            "nickName.max" => sprintf($message['max'], 255),
+            "nickName.min" => sprintf($message['min'], 4),
+            "nickName.max" => sprintf($message['max'], 50),
             "nickName.regex" => $message['regex'],
             //password
             "password.required" => $message['required'],
+            "password.min" => sprintf($message['min'], 8),
             "password.max" => sprintf($message['max'], 255),
             "password.regex" => $message['regex'],
             //address
