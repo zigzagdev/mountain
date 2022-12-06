@@ -38,8 +38,6 @@ class NewsMakingController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "ニュース投稿の投稿に失敗致しました。"]);
-            $statusmessage = $e->getMessage();
-            print_r($statusmessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
 

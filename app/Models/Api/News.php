@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class News extends Model
 {
-    protected $fillable = ['admin_id', 'created_at', 'content', 'updated_at', 'title'];
+    protected $guarded = ['id'];
     protected $dates = ['deleted_at'];
     use SoftDeletes;
 

@@ -60,8 +60,8 @@ Route::middleware('api')->group(function () {
         });
         //AdminController_Relations(passwordChange, emailChange)
         Route::controller(AdminColumnChangeController::class)->group(function () {
-            Route::put('/emailChange', 'adminPasswordChange');
-            Route::put('/nameChange', 'adminPasswordChange');
+            Route::put('/emailChange', 'adminEmailChange');
+            Route::put('/nameChange', 'adminNameChange');
             Route::put('/passwordChange', 'adminPasswordChange');
         });
     });

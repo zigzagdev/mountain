@@ -54,7 +54,7 @@ class AdminColumnChangeController extends Controller
     public function adminPasswordChange(PasswordRequest  $request)
     {
         try {
-            $adminId = $request->adminId;
+            $adminId = $request->admin_id;
             $checkAdmin = Admin::find($adminId);
 
             if (empty($checkAdmin)) {
@@ -66,10 +66,7 @@ class AdminColumnChangeController extends Controller
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
-            if (Hash::make($request->password) !== $checkAdmin->password) {
-                $request->merge(['statusMessage' => CommonConst::ERR_08]);
-                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
-            }
+
             DB::beginTransaction();
             $checkAdmin->update([
                'password' => Hash::make($request->password),
@@ -86,10 +83,29 @@ class AdminColumnChangeController extends Controller
     public function adminNameChange(NameRequest $request)
     {
         try {
-            $adminId = $request->adminId;
+            $adminId = $request->admin_id;
+            $checkAdmin = Admin::find($adminId);
+
+            if (empty($checkAdmin)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+
+            if (empty($checkAdmin->nick_name)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+
+            DB::beginTransaction();
+            $checkAdmin->update([
+                "nick_name" => $request->nickName
+            ]);
+            DB::commit();
+
+            return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "記事の投稿に失敗致しました。"]);
+            $request->merge(['statusMessage' => "編集内容の更新に失敗致しました。"]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
