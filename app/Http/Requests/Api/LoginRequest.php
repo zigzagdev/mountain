@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class LoginRequest extends FormRequest
+class LoginRequest extends CommonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -28,7 +28,7 @@ class LoginRequest extends FormRequest
     {
         return [
             "password" => "required|string",
-            "address" => "required|string|email",
+            "address" => "required|email|string",
         ];
     }
 
@@ -42,26 +42,15 @@ class LoginRequest extends FormRequest
 
     public function messages()
     {
+        $message = $this->errorMessages();
         return [
-            'required' => ':attributeは入力必須となっております。',
-            'string' => ':attributeの値が不正です。',
-            'email' => 'メールアドレスの形式が正しくありません。',
+            //password
+            "password.required" => $message['required'],
+            "password.string" => $message['string'],
+            //address
+            "address.required" => $message['required'],
+            "address.email" => $message['email'],
+            "address.string" => $message['string'],
         ];
-    }
-
-
-    // Not to send API Response 302, write down these codes.
-    protected function failedValidation(validator $validator)
-    {
-        $errors = $validator->errors()->toArray();
-
-        // resetFunction is get the first element form $errors Array.
-        $response = [
-            'statusCode'  => MessageConst::Bad_Request,
-            'statusMessage' => reset($errors)[0]
-        ];
-        throw new HttpResponseException(
-            response()->json($response, MessageConst::Bad_Request)
-        );
     }
 }
