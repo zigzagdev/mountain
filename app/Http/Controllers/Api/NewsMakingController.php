@@ -27,10 +27,10 @@ class NewsMakingController extends Controller
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
             News::create([
-                'title' => $request->input('title'),
-                'content' => $request->input('content'),
+                'news_title' => $request->input('newsTitle'),
+                'news_content' => $request->input('newsContent'),
                 'admin_id' => $adminId,
-                'deleted_at' => Carbon::now()->addMonths(3),
+                'expiration' => Carbon::now()->addMonths(3),
             ]);
 
             return new NewsResource($request);
