@@ -23,7 +23,7 @@ class CommentTotalCollection extends ResourceCollection
                 return [
                     'id' => $item->id,
                     'name' => $item->name,
-                    'content' => Str::limit($this->content, 20, '...')
+                    'content' => Str::limit($item->content, 20, '...')
                 ];
             })
         ];
