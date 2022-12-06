@@ -33,7 +33,7 @@ class RegisterUserController extends Controller
             }
             DB::commit();
             $admin = Admin::create([
-                'nickName' => $request->input('nickName'),
+                'nick_name' => $request->input('nickName'),
                 'address' => $request->input('address'),
                 'password' => Hash::make($request->input('password')),
                 'age' => $request->input('age'),
@@ -55,6 +55,8 @@ class RegisterUserController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "会員情報の登録に失敗致しました。"]);
+            $statusMessage = $e->getMessage();
+            print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
