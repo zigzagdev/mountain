@@ -17,8 +17,8 @@ class CreateNewsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('admin_id')->comment('adminId');
             $table->foreign('admin_id')->references('id')->on('admins')->onUpdate('CASCADE')->onDelete('CASCADE');
-            $table->string('title', 100);
-            $table->text('content');
+            $table->string('news_title', 100);
+            $table->text('news_content');
             $table->timestamps();
         });
     }
