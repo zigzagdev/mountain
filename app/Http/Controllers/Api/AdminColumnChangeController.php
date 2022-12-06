@@ -12,6 +12,8 @@ use App\Http\Resources\Api\SuccessResource;
 use App\Models\Api\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Testing\Fluent\Concerns\Has;
 use PharIo\Manifest\Email;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -22,32 +24,29 @@ class AdminColumnChangeController extends Controller
         // emailChangeFunction
         try {
             $adminId = $request->admin_id;
-            $checkAdmin = Admin::where('id', $adminId)->get();
-            $changeAdmin = $checkAdmin->toArray();
+            $checkAdmin = Admin::find($adminId);
             if (empty($checkAdmin)) {
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
-
-            $checkEmail = $changeAdmin['0']['address'];
-            if (empty($checkEmail)) {
+            if (empty($checkAdmin->address)) {
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
-            } elseif ($request->address == $checkEmail) {
+            }
+            if ($request->address == $checkAdmin) {
                 $request->merge(['statusMessage' => CommonConst::ERR_08]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
-            } else {
-                Admin::where('address', $checkEmail)
-                    ->update([
-                        'address' => $request->address
-                    ]);
             }
+            DB::beginTransaction();
+            $checkAdmin->update([
+                'address' => $request->address
+            ]);
+            DB::commit();
             return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "記事の投稿に失敗致しました。"]);
-            $statusMessage = $e->getMessage();
-            print_r($statusMessage);
+            $request->merge(['statusMessage' => "メールアドレスの更新に失敗致しました。"]);
+
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -56,9 +55,30 @@ class AdminColumnChangeController extends Controller
     {
         try {
             $adminId = $request->adminId;
+            $checkAdmin = Admin::find($adminId);
+
+            if (empty($checkAdmin)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+
+            if (empty($checkAdmin->password)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+            if (Hash::make($request->password) !== $checkAdmin->password) {
+                $request->merge(['statusMessage' => CommonConst::ERR_08]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+            DB::beginTransaction();
+            $checkAdmin->update([
+               'password' => Hash::make($request->password),
+            ]);
+            DB::commit();
+            return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "記事の投稿に失敗致しました。"]);
+            $request->merge(['statusMessage' => "パスワードの更新に失敗致しました。"]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
