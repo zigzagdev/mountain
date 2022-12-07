@@ -36,11 +36,10 @@ class ArticleController extends Controller
                 'title' => $request->input('title'),
                 'content' => $request->input('content'),
                 'prefecture' => $request->input('prefecture'),
-                'statusMessage' => MessageConst::OK,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
-                'mountainRate' => $request->input('mountainRate'),
-                'mountainName' => $request->input('mountainName'),
+                'mountain_rate' => $request->input('mountainRate'),
+                'mountain_name' => $request->input('mountainName'),
                 'adminId' => $adminId,
             ]);
 
@@ -48,8 +47,8 @@ class ArticleController extends Controller
             if (!empty($request->input('mountainRate')))
                 MountainRating::firstOrCreate([
                     'admin_id' => $adminId,
-                    'mountainRate' => $request->input('mountainRate'),
-                    'mountainName' => $request->input('mountainName'),
+                    'mountain_rate' => $request->input('mountainRate'),
+                    'mountain_name' => $request->input('mountainName'),
                     'prefecture' => $request->input('prefecture'),
                 ]);
 

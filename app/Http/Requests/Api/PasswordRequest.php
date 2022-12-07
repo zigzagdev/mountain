@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class LoginRequest extends CommonRequest
+class PasswordRequest extends CommonRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,30 +27,21 @@ class LoginRequest extends CommonRequest
     public function rules()
     {
         return [
-            "password" => "required|string",
-            "address" => "required|email|string",
-        ];
-    }
-
-    public function attributes()
-    {
-        return [
-            'address' => 'メールアドレス',
-            'password' => 'パスワード',
+            "password" => "required|min:8|max:100|regex:/^[A-Za-z\d_\-]+$/"
         ];
     }
 
     public function messages()
     {
         $message = $this->errorMessages();
-        return [
+        return  [
             //password
             "password.required" => $message['required'],
-            "password.string" => $message['string'],
-            //address
-            "address.required" => $message['required'],
-            "address.email" => $message['email'],
-            "address.string" => $message['string'],
+            "password.min" => sprintf($message['max'], 8),
+            "password.max" => sprintf($message['max'], 100),
+            "password.email" => $message['email'],
+            "password.unique" => $message['unique'],
+            "password.regex" => $message['regex'],
         ];
     }
 }

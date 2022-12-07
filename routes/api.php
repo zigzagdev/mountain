@@ -58,6 +58,12 @@ Route::middleware('api')->group(function () {
         Route::controller(NewsMakingController::class)->group(function () {
             Route::post('/newsMake', 'newsMake');
         });
+        //AdminController_Relations(passwordChange, emailChange)
+        Route::controller(AdminColumnChangeController::class)->group(function () {
+            Route::put('/emailChange', 'adminEmailChange');
+            Route::put('/nameChange', 'adminNameChange');
+            Route::put('/passwordChange', 'adminPasswordChange');
+        });
     });
 });
 

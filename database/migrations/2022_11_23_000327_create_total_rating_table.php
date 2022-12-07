@@ -14,8 +14,8 @@ class CreateTotalRatingTable extends Migration
     public function up()
     {
         Schema::create('total_rating', function (Blueprint $table) {
-            $table->string('mountainName', 100);
-            $table->integer('mountainRate');
+            $table->string('mountain_name', 100);
+            $table->integer('mountain_rate');
             $table->tinyInteger('prefecture')->comment('都道府県_コード番号');
             $table->unsignedBigInteger('admin_id')->comment('adminId');
             $table->timestamps();

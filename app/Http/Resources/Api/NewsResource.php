@@ -22,8 +22,8 @@ class NewsResource extends JsonResource
             'statusCode' => Response::HTTP_OK,
             'statusMessage' => 'OK',
             'createdNews' => [
-                'title' => $this->title,
-                'content' => Str::limit($this->content, 15, '...'),
+                'newsTitle' => $this->newsTitle,
+                'newsContent' => Str::limit($this->newsContent, 15, '...'),
                 'expiration' => Carbon::now()->addMonths(3),
             ]
         ];

@@ -14,8 +14,8 @@ class CreateAverageRatingTable extends Migration
     public function up()
     {
         Schema::create('average_rating', function (Blueprint $table) {
-            $table->string('mountainName', 100);
-            $table->decimal('avgRate');
+            $table->string('mountain_name', 100);
+            $table->decimal('average_rate');
             $table->string('prefecture', 100)->comment('都道府県_コード番号');
             $table->timestamps();
             $table->softDeletes();

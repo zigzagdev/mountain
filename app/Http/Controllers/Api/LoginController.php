@@ -23,13 +23,14 @@ class LoginController extends Controller
             $loginUser = Admin::where('address', $request->address)->first();
             if (empty($loginUser)) {
                 $request->merge(['statusMessage' => CommonConst::ERR_01]);
-                return new ErrorResource($request);
+                return new ErrorResource($request, Response::HTTP_UNAUTHORIZED);
             }
             $password = $request->password;
             // パスワードをハッシュ化
             if (!Hash::check($password, $loginUser->password) ) {
                 $request->merge(['statusMessage' => CommonConst::ERR_01]);
-                return new ErrorResource($request);
+                var_dump($request->toArray());
+                return new ErrorResource($request, Response::HTTP_UNAUTHORIZED);
             }
             DB::beginTransaction();
 
@@ -41,7 +42,8 @@ class LoginController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => CommonConst::ERR_01]);
-
+            $statusMessage = $e->getMessage();
+            print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
