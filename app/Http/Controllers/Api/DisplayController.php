@@ -20,7 +20,7 @@ class DisplayController extends Controller
             // In here, searching SQL is selected from here .
             $useSQL = Article::withoutTrashed();
             $keyword = $request->keyword;
-            $ratingRecords = $useSQL->where('mountainName', 'LIKE', '%' . $keyword . '%')
+            $ratingRecords = $useSQL->where('mountain_name', 'LIKE', '%' . $keyword . '%')
                 ->orWhere('title', 'LIKE', '%' . $keyword . '%')
                 ->orWhere('content', 'LIKE', '%' . $keyword . '%')
                 ->get();
@@ -37,7 +37,7 @@ class DisplayController extends Controller
             $pushArray = [];
 
             foreach ($arrRecords as $ratingRecord) {
-                if (!empty($ratingRecord['mountainRate'])) {
+                if (!empty($ratingRecord['mountain_rate'])) {
                     array_push($pushArray, $ratingRecord);
                 }
             }
@@ -45,31 +45,33 @@ class DisplayController extends Controller
             $reviews = [];
 
             // making a new array which has a total rating and how many rating it has.
-            $totalRatingScore = $pushArray[0]['mountainRate'];
-            $mountainName = $pushArray[0]['mountainName'];
+            $totalRatingScore = $pushArray[0]['mountain_rate'];
+            $mountainName = $pushArray[0]['mountain_name'];
             $prefecture = $pushArray[0]['prefecture'];
             $dividedRecord = 1;
+
             for ($i = 1; $i <= $count - 1; $i++) {
                 if (intval($pushArray[$i - 1]['prefecture']) === intval($pushArray[$i]['prefecture'])) {
-                    $totalRatingScore += intval($pushArray[$i]['mountainRate']);
+                    $totalRatingScore += intval($pushArray[$i]['mountain_rate']);
                     $dividedRecord += 1;
-                    $mountainName = $pushArray[$i]['mountainName'];
+                    $mountainName = $pushArray[$i]['mountain_name'];
                     $prefecture = $pushArray[$i]['prefecture'];
+//                    array_push($reviews, array($totalRatingScore, $dividedRecord, $mountainName, $prefecture));
                 } else {
                     array_push($reviews, array($totalRatingScore, $dividedRecord, $mountainName, $prefecture));
-                    $totalRatingScore = $pushArray[$i]['mountainRate'];
+                    $totalRatingScore = $pushArray[$i]['mountain_rate'];
                     $dividedRecord = 1;
                 }
             }
-
+            array_push($reviews, array($totalRatingScore, $dividedRecord, $mountainName, $prefecture));
             $avg = [];
             foreach ($reviews as $key => $value) {
                 $score = $value['0'] / $value['1'];
                 $goalRating = round($score * 2, 0) / 2;
                 array_push($avg, array($goalRating, $value['2'], Prefecture::eachPrefecture[$value['3']]));
                 AvgRating::updateOrCreate([
-                    'mountainName' => $value['2'],
-                    'avgRate' => $goalRating,
+                    'mountain_name' => $value['2'],
+                    'average_rate' => $goalRating,
                     'prefecture' => Prefecture::eachPrefecture[$value['3']],
                 ]);
             }
@@ -77,6 +79,8 @@ class DisplayController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "検索内容にてエラーが発生しました。"]);
+            $statusMessage = $e->getMessage();
+            print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
