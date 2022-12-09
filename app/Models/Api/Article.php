@@ -13,4 +13,13 @@ class Article extends Model
     protected $table = 'articles';
     use SoftDeletes;
 
+    public static function selectedAllArticles()
+    {
+        return self::select([
+            'title', 'content', 'prefecture', 'mountain_name', 'mountain_rate','adminId'
+        ])->leftjoin('admins', function ($join) {
+            $join->on('articles.adminId', '=', 'admins.id');
+        })->orderBy('articles.created_at', 'asc')
+            ->get();
+    }
 }
