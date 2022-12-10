@@ -9,6 +9,7 @@
 
     Your selected mountain is located in:  {{$prefecture}}
 
+
     check it and confirm there are no wrong things .
     @include('mail.Common.Footer')
 @endsection
