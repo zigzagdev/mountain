@@ -1,1 +1,4 @@
-resources/views/Header.blade.php
+==================
+Authenticated mail .
+
+==================

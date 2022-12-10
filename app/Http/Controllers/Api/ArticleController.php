@@ -88,7 +88,8 @@ class ArticleController extends Controller
                     'mountain_name' => $request->input('mountainName'),
                     'adminId' => $adminId,
                 ]);
-           Mail::to($findArticle->address)->send(new ArticleUpdateMail($findArticle));
+
+            Mail::to($findArticle->address)->send(new ArticleUpdateMail($findArticle));
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();

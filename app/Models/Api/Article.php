@@ -3,7 +3,6 @@ namespace App\Models\Api;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Article extends Model
@@ -13,13 +12,15 @@ class Article extends Model
     protected $table = 'articles';
     use SoftDeletes;
 
-    public static function selectedAllArticles()
+    public static function selectedAllArticles($articleId)
     {
         return self::select([
-            'title', 'content', 'prefecture', 'mountain_name', 'mountain_rate','adminId'
+            'title', 'content', 'prefecture', 'mountain_name', 'mountain_rate', 'adminId', 'address', 'nick_name'
         ])->leftjoin('admins', function ($join) {
             $join->on('articles.adminId', '=', 'admins.id');
-        })->orderBy('articles.created_at', 'asc')
-            ->get();
+        })->where('articles.id', $articleId)
+            ->orderBy('articles.created_at', 'asc')
+            ->first();
     }
+
 }
