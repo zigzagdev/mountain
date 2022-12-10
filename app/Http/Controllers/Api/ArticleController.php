@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Consts\Api\MessageConst;
 use App\Http\Resources\Api\RegisterArticleResource;
+use App\Mail\Api\ArticleUpdateMail;
 use App\Models\Api\Admin;
 use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
@@ -12,6 +13,7 @@ use App\Http\Requests\Api\ArticleRequest;
 use App\Models\Api\Article;
 use App\Models\Api\MountainRating;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 use App\Consts\Api\Prefecture;
 use Carbon\Carbon;
@@ -75,11 +77,7 @@ class ArticleController extends Controller
             $adminId = $request->adminId;
             $articleId = $request->id;
 
-            $findArticle = Article::find($articleId);
-            if (!$findArticle) {
-                $request->merge(['statusMessage' => CommonConst::ERR_05]);
-                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
-            }
+            $findArticle = Article::selectedAllArticles($articleId);
             Article::where('id', $articleId)
                 ->update([
                     'title' => $request->input('title'),
@@ -90,6 +88,7 @@ class ArticleController extends Controller
                     'mountain_name' => $request->input('mountainName'),
                     'adminId' => $adminId,
                 ]);
+           Mail::to($findArticle->address)->send(new ArticleUpdateMail($findArticle));
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
