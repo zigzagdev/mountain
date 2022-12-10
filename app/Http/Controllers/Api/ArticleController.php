@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Consts\Api\MessageConst;
 use App\Http\Resources\Api\RegisterArticleResource;
+use App\Mail\Api\ArticleUpdateMail;
 use App\Models\Api\Admin;
 use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
@@ -12,10 +13,11 @@ use App\Http\Requests\Api\ArticleRequest;
 use App\Models\Api\Article;
 use App\Models\Api\MountainRating;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 use App\Consts\Api\Prefecture;
 use Carbon\Carbon;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 
 class ArticleController extends Controller
@@ -52,6 +54,14 @@ class ArticleController extends Controller
                     'prefecture' => $request->input('prefecture'),
                 ]);
 
+            if (!empty($request->input('mountainRate')))
+                MountainRating::updateOrCreate([
+                    'admin_id' => $adminId,
+                    'mountain_rate' => $request->input('mountainRate'),
+                    'mountain_name' => $request->input('mountainName'),
+                    'prefecture' => $request->input('prefecture'),
+                ]);
+
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -64,11 +74,27 @@ class ArticleController extends Controller
     public function articleReWrite(Request $request)
     {
         try {
-            var_dump($request->toArray());
+            $adminId = $request->adminId;
+            $articleId = $request->id;
 
+            $findArticle = Article::selectedAllArticles($articleId);
+            Article::where('id', $articleId)
+                ->update([
+                    'title' => $request->input('title'),
+                    'content' => $request->input('content'),
+                    'prefecture' => $request->input('prefecture'),
+                    'updated_at' => Carbon::now(),
+                    'mountain_rate' => $request->input('mountainRate'),
+                    'mountain_name' => $request->input('mountainName'),
+                    'adminId' => $adminId,
+                ]);
+           Mail::to($findArticle->address)->send(new ArticleUpdateMail($findArticle));
+            return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "記事の上書きに失敗致しました。"]);
+            $statusMessage = $e->getMessage();
+            print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
