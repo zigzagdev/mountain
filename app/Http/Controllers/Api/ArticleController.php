@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 use App\Consts\Api\Prefecture;
 use Carbon\Carbon;
-use Illuminate\Http\Client\Request;
+use Illuminate\Http\Request;
 
 
 class ArticleController extends Controller
@@ -52,6 +52,14 @@ class ArticleController extends Controller
                     'prefecture' => $request->input('prefecture'),
                 ]);
 
+            if (!empty($request->input('mountainRate')))
+                MountainRating::updateOrCreate([
+                    'admin_id' => $adminId,
+                    'mountain_rate' => $request->input('mountainRate'),
+                    'mountain_name' => $request->input('mountainName'),
+                    'prefecture' => $request->input('prefecture'),
+                ]);
+
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -64,11 +72,30 @@ class ArticleController extends Controller
     public function articleReWrite(Request $request)
     {
         try {
-            var_dump($request->toArray());
+            $adminId = $request->adminId;
+            $articleId = $request->id;
 
+            $findArticle = Article::find($articleId);
+            if (!$findArticle) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+            Article::where('id', $articleId)
+                ->update([
+                    'title' => $request->input('title'),
+                    'content' => $request->input('content'),
+                    'prefecture' => $request->input('prefecture'),
+                    'updated_at' => Carbon::now(),
+                    'mountain_rate' => $request->input('mountainRate'),
+                    'mountain_name' => $request->input('mountainName'),
+                    'adminId' => $adminId,
+                ]);
+            return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "記事の上書きに失敗致しました。"]);
+            $statusMessage = $e->getMessage();
+            print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
