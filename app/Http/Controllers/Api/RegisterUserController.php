@@ -42,10 +42,10 @@ class RegisterUserController extends Controller
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ]);
-            $address = $admin->address;
-            $nickName = $admin->nickName;
-
-            Mail::to($address)->send(new RegisterSuccessMail($nickName));
+//            $address = $admin->address;
+//            $nickName = $admin->nickName;
+//
+//            Mail::to($address)->send(new RegisterSuccessMail($nickName));
 
             $token = TokenMakeService::createToken($admin->id);
             $request->merge(['token' => $token]);
