@@ -29,7 +29,7 @@ class ArticleRequest extends CommonRequest
             "title" => "required|min:5||max:255|string",
             "content" => "required|min:5|max:1000|string",
             "prefecture" => "between:1,47|required",
-            "mountainRate" => "between:1,5|numeric|integer",
+            "mountainRate" => "between:1,5|numeric|integer|nullable",
             "mountainName" => "string|required|min:4|max:100|"
         ];
     }
