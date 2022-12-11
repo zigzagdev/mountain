@@ -12,13 +12,14 @@ class News extends Model
     use SoftDeletes;
 
 
-    public static function selectedAllNews()
+    public static function selectedAllNews($newsId)
     {
         return self::select([
-            'news_title', 'news_content', 'admin_id'
+            'news_title', 'news_content', 'address', 'nick_name'
         ])->leftjoin('admins', function ($join) {
             $join->on('news.admin_id', '=', 'admins.id');
-        })->orderBy('news.created_at', 'asc')
-            ->get();
+        })->where('news.id', $newsId)
+            ->orderBy('news.created_at', 'asc')
+            ->first();
     }
 }

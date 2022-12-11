@@ -1,5 +1,6 @@
 @extends('mail.Common.Template')
 @include('mail.Common.Header')
+@include('mail.Common.Footer')
 @section('Content')
     your article was updated correctly !
 
@@ -11,5 +12,4 @@
 
 
     check it and confirm there are no wrong things .
-    @include('mail.Common.Footer')
 @endsection

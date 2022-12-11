@@ -71,14 +71,14 @@ class ArticleController extends Controller
     }
 
     //記事編集
-    public function articleReWrite(Request $request)
+    public function articleReWrite(ArticleRequest $request)
     {
         try {
             $adminId = $request->adminId;
             $articleId = $request->id;
 
             $findArticle = Article::selectedAllArticles($articleId);
-            Article::where('id', $articleId)
+            $findArticle::where('id', $articleId)
                 ->update([
                     'title' => $request->input('title'),
                     'content' => $request->input('content'),

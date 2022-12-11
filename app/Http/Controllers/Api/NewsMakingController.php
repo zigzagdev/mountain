@@ -40,6 +40,35 @@ class NewsMakingController extends Controller
             $request->merge(['statusMessage' => "ニュース投稿の投稿に失敗致しました。"]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
+    }
 
+    public function newsReWrite(Request $request)
+    {
+        try {
+            $adminId = $request->adminId;
+            $newsId = $request->id;
+
+            $findNews = News::selectedAllNews($newsId);
+            if (empty($findNews)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+            $findNews::where('id', $newsId)
+                ->update([
+                    'news_title' => $request->input('newsTitle'),
+                    'news_content' => $request->input('newsContent'),
+                    'admin_id' => $adminId,
+                    'expiration' => Carbon::now()->addMonths(3),
+                ]);
+
+//            return new NewsResource($request);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $request->merge(['statusMessage' => "ニュース投稿の投稿に失敗致しました。"]);
+            $statusMessage = $e->getMessage();
+            print_r($statusMessage);
+            return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+        }
     }
 }
