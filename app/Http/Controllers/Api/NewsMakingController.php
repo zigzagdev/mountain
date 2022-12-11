@@ -7,11 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\NewsRequest;
 use App\Http\Resources\Api\ErrorResource;
 use App\Http\Resources\Api\NewsResource;
+use App\Mail\Api\ArticleUpdateMail;
+use App\Mail\Api\NewsCreateMail;
+use App\Mail\Api\NewsUpdateMail;
 use App\Models\Api\Admin;
 use App\Models\Api\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 class NewsMakingController extends Controller
@@ -26,13 +30,13 @@ class NewsMakingController extends Controller
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
-            News::create([
+            $recordNews = News::create([
                 'news_title' => $request->input('newsTitle'),
                 'news_content' => $request->input('newsContent'),
                 'admin_id' => $adminId,
                 'expiration' => Carbon::now()->addMonths(3),
             ]);
-
+            Mail::to($recordNews->address)->send(new NewsCreateMail($recordNews, $admin));
             return new NewsResource($request);
 
         } catch (\Exception $e) {
@@ -60,8 +64,8 @@ class NewsMakingController extends Controller
                     'admin_id' => $adminId,
                     'expiration' => Carbon::now()->addMonths(3),
                 ]);
-
-//            return new NewsResource($request);
+            Mail::to($findNews->address)->send(new NewsUpdateMail($findNews));
+            return new NewsResource($request);
 
         } catch (\Exception $e) {
             DB::rollBack();

@@ -95,8 +95,8 @@ class ArticleController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "記事の上書きに失敗致しました。"]);
-            $statusMessage = $e->getMessage();
-            print_r($statusMessage);
+
+
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
