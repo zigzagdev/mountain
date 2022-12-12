@@ -26,6 +26,7 @@ class CommentUpdateMail extends Mailable
         $this->prefecture = Prefecture::eachPrefecture[$mailUserInform->prefecture];
     }
 
+
     /**
      * Build the message.
      *
