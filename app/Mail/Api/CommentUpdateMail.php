@@ -20,10 +20,11 @@ class CommentUpdateMail extends Mailable
      */
     public function __construct($mailUserInform)
     {
-        $this->nickName = $mailUserInform->nick_name;
         $this->title = $mailUserInform->title;
         $this->content = Str::limit($mailUserInform->content, 15, '...');
         $this->prefecture = Prefecture::eachPrefecture[$mailUserInform->prefecture];
+        $this->content = $mailUserInform->content;
+        $this->name = $mailUserInform->name;
     }
 
 
@@ -35,12 +36,12 @@ class CommentUpdateMail extends Mailable
     public function build()
     {
         return $this->from(config('mail.from.address'))
-            ->subject('ニュースの投稿が完了致しました。')
+            ->subject('コメントの更新が完了致しました。')
             ->text('mail.Api.CommentUpdateSuccess')
             ->with([
                 'name' => $this->nickName,
-                'newsTitle' => $this->newsTitle,
-                'newsContent' => $this->newsContent,
+                'title' => $this->title,
+                'content' => $this->content,
             ]);
     }
 }
