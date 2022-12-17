@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 use App\Consts\Api\Prefecture;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Mail\Api\ArticleCreateMail;
 
 
 class ArticleController extends Controller
@@ -34,7 +34,8 @@ class ArticleController extends Controller
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
-            Article::create([
+
+            $newArticle = Article::create([
                 'title' => $request->input('title'),
                 'content' => $request->input('content'),
                 'prefecture' => $request->input('prefecture'),
@@ -54,14 +55,7 @@ class ArticleController extends Controller
                     'prefecture' => $request->input('prefecture'),
                 ]);
 
-            if (!empty($request->input('mountainRate')))
-                MountainRating::updateOrCreate([
-                    'admin_id' => $adminId,
-                    'mountain_rate' => $request->input('mountainRate'),
-                    'mountain_name' => $request->input('mountainName'),
-                    'prefecture' => $request->input('prefecture'),
-                ]);
-
+            Mail::to($admin->address)->send(new ArticleCreateMail($admin, $newArticle));
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -88,14 +82,21 @@ class ArticleController extends Controller
                     'mountain_name' => $request->input('mountainName'),
                     'adminId' => $adminId,
                 ]);
+            if (!empty($request->input('mountainRate')))
+                MountainRating::updateOrCreate([
+                    'admin_id' => $adminId,
+                    'mountain_rate' => $request->input('mountainRate'),
+                    'mountain_name' => $request->input('mountainName'),
+                    'prefecture' => $request->input('prefecture'),
+                ]);
 
             Mail::to($findArticle->address)->send(new ArticleUpdateMail($findArticle));
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "記事の上書きに失敗致しました。"]);
-            $statusMessage = $e->getMessage();
-            print_r($statusMessage);
+
+
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
