@@ -49,7 +49,7 @@ class CommentController extends Controller
         }
     }
 
-    public function changeComment(Request $request) {
+    public function changeComment(CommentRequest $request) {
         try {
             DB::beginTransaction();
             $articleId = $request->articleId;
@@ -78,6 +78,5 @@ class CommentController extends Controller
             $request->merge(['statusMessage' => "コメントの更新に失敗致しました。"]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
-
     }
 }
