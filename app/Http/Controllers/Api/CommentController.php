@@ -14,9 +14,11 @@ use App\Mail\Api\CommentUpdateMail;
 use App\Models\Api\Article;
 use App\Models\Api\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
+use App\Http\Resources\Api\CommentDeleteResource;
 
 
 
@@ -56,6 +58,11 @@ class CommentController extends Controller
             $commentId = $request->id;
             $selectedComment = Comment::selectedComment($articleId);
 
+            if (empty($articleId)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+
             DB::commit();
             $selectedComment::where('id', $commentId)
                 ->update([
@@ -63,19 +70,38 @@ class CommentController extends Controller
                     'content' => $request->input('content'),
                     'article_id' => $articleId,
                 ]);
-
-            if (empty($articleId)) {
-                $request->merge(['statusMessage' => CommonConst::ERR_05]);
-                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
-            }
-
             $mailUserInform = Article::compilingComments($articleId);
             Mail::to($mailUserInform->address)->send(new CommentNoticeChange($mailUserInform));
-            DB::commit();
             return new CommentUpdateResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "コメントの更新に失敗致しました。"]);
+            return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function deleteComment(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $commentId = $request->id;
+            if (empty($commentId)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+            DB::commit();
+            if (Comment::find($commentId) == null) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+            Comment::find($commentId)->delete();
+            return new CommentDeleteResource($request);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $request->merge(['statusMessage' => "コメントの削除に失敗致しました。"]);
+            $a = $e->getMessage();
+            print_r($a);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }

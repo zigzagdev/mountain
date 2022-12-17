@@ -34,6 +34,7 @@ Route::middleware('api')->group(function () {
   Route::controller(CommentController::class)->group(function (){
       Route::post('/commentCreate', 'makeComment');
       Route::put('/changeComment', 'changeComment');
+      Route::delete('/deleteComment', 'deleteComment');
   });
 
   //LoginController
