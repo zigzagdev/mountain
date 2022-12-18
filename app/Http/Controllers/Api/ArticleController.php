@@ -3,7 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Consts\Api\MessageConst;
+use App\Http\Resources\Api\ArticleDeleteResource;
 use App\Http\Resources\Api\RegisterArticleResource;
+use App\Mail\Api\ArticleDeleteNotificationMail;
+use App\Mail\Api\ArticleDelteNotificationMail;
 use App\Mail\Api\ArticleUpdateMail;
 use App\Models\Api\Admin;
 use App\Consts\CommonConst;
@@ -11,11 +14,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\ErrorResource;
 use App\Http\Requests\Api\ArticleRequest;
 use App\Models\Api\Article;
+use App\Models\Api\Comment;
 use App\Models\Api\MountainRating;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 use App\Consts\Api\Prefecture;
+use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Mail\Api\ArticleCreateMail;
 
@@ -59,7 +64,7 @@ class ArticleController extends Controller
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "記事の投稿に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::REGISTER_FAILED, '記事')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -68,10 +73,15 @@ class ArticleController extends Controller
     public function articleReWrite(ArticleRequest $request)
     {
         try {
+            DB::beginTransaction();
             $adminId = $request->adminId;
             $articleId = $request->id;
 
             $findArticle = Article::selectedAllArticles($articleId);
+            if (empty($findArticle)) {
+                $request->merge(['statusMessage' => sprintf(CommonConst::UPDATE_FAILED, '該当記事')]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
             $findArticle::where('id', $articleId)
                 ->update([
                     'title' => $request->input('title'),
@@ -90,13 +100,41 @@ class ArticleController extends Controller
                     'prefecture' => $request->input('prefecture'),
                 ]);
 
+            DB::commit();
             Mail::to($findArticle->address)->send(new ArticleUpdateMail($findArticle));
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "記事の上書きに失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::UPDATE_FAILED, '該当記事')]);
+            return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+        }
+    }
 
+    public function articleDelete(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $adminId = $request->adminId;
+            $articleId = $request->id;
 
+            $findArticle = Article::selectedAllArticles($articleId);
+            if (empty($adminId)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+            if ($findArticle->adminId == null) {
+                $request->merge(['statusMessage' => CommonConst::ERR_05]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+            $address = $findArticle->address;
+            Article::find($articleId)->delete();
+            DB::commit();
+
+            Mail::to($address)->send(new ArticleDeleteNotificationMail());
+            return new ArticleDeleteResource($request);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $request->merge(['statusMessage' => sprintf(CommonConst::DELETE_FAILED, '該当記事')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
