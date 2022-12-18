@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Consts\Api\Prefecture;
+use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\ErrorResource;
 use App\Models\Api\Article;
@@ -78,7 +79,7 @@ class DisplayController extends Controller
             return new RatingDisplayCollection($avg);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "検索内容にてエラーが発生しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::FETCH_FAILED, '検索内容')]);
             $statusMessage = $e->getMessage();
             print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);

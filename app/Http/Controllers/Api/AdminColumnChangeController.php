@@ -23,6 +23,7 @@ class AdminColumnChangeController extends Controller
     {
         // emailChangeFunction
         try {
+            DB::beginTransaction();
             $adminId = $request->admin_id;
             $checkAdmin = Admin::find($adminId);
             if (empty($checkAdmin)) {
@@ -37,7 +38,6 @@ class AdminColumnChangeController extends Controller
                 $request->merge(['statusMessage' => CommonConst::ERR_08]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
-            DB::beginTransaction();
             $checkAdmin->update([
                 'address' => $request->address
             ]);
@@ -45,8 +45,7 @@ class AdminColumnChangeController extends Controller
             return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "メールアドレスの更新に失敗致しました。"]);
-
+            $request->merge(['statusMessage' => sprintf(CommonConst::UPDATE_FAILED, 'メールアドレス')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -54,6 +53,7 @@ class AdminColumnChangeController extends Controller
     public function adminPasswordChange(PasswordRequest  $request)
     {
         try {
+            DB::beginTransaction();
             $adminId = $request->admin_id;
             $checkAdmin = Admin::find($adminId);
 
@@ -67,7 +67,6 @@ class AdminColumnChangeController extends Controller
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
 
-            DB::beginTransaction();
             $checkAdmin->update([
                'password' => Hash::make($request->password),
             ]);
@@ -75,7 +74,7 @@ class AdminColumnChangeController extends Controller
             return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "パスワードの更新に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::UPDATE_FAILED, 'パスワード')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -83,6 +82,7 @@ class AdminColumnChangeController extends Controller
     public function adminNameChange(NameRequest $request)
     {
         try {
+            DB::beginTransaction();
             $adminId = $request->admin_id;
             $checkAdmin = Admin::find($adminId);
 
@@ -96,16 +96,14 @@ class AdminColumnChangeController extends Controller
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
 
-            DB::beginTransaction();
             $checkAdmin->update([
                 "nick_name" => $request->nickName
             ]);
             DB::commit();
-
             return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "編集内容の更新に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::UPDATE_FAILED, '名前')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
