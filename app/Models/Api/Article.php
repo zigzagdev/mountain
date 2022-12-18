@@ -4,13 +4,20 @@ namespace App\Models\Api;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 
 class Article extends Model
 {
+    use SoftDeletes, CascadeSoftDeletes;
     protected $guarded = ['id'];
     protected $dates = ['deleted_at'];
     protected $table = 'articles';
-    use SoftDeletes;
+    protected $cascadeDeletes = ['comments'];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 
     public static function selectedAllArticles($articleId)
     {
@@ -40,5 +47,4 @@ class Article extends Model
             ->orderBy('articles.created_at', 'asc')
             ->first();
     }
-
 }
