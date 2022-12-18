@@ -12,7 +12,7 @@ class CommonConst
     public const SEND_FAILED = "%sの送信に失敗しました。";
     public const FETCH_FAILED = "%sの取得に失敗しました。";
     public const AUTHENTICATE_FAILED = "%sの認証に失敗しました。";
-    public const DELETE_FAILED = "%sの削除に失敗しました。";
+    public const DELETE_FAILED = "の削除に失敗しました。";
     public const STATUS_NOT_FOUND = "ステータスが存在しません。";
     public const SESSION_FAILED = "セッションが切れました。再度ログインをお願い致します。";
 

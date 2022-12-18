@@ -10,7 +10,6 @@ use App\Http\Resources\Api\CommentUpdateResource;
 use App\Http\Resources\Api\ErrorResource;
 use App\Mail\Api\ArticleUpdateMail;
 use App\Mail\Api\CommentNoticeChange;
-use App\Mail\Api\CommentUpdateMail;
 use App\Models\Api\Article;
 use App\Models\Api\Comment;
 use Illuminate\Http\Request;
@@ -34,7 +33,6 @@ class CommentController extends Controller
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
-            DB::commit();
             Comment::create([
                 'name' => $request->input('name'),
                 'content' => $request->input('content'),
@@ -63,13 +61,14 @@ class CommentController extends Controller
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
 
-            DB::commit();
             $selectedComment::where('id', $commentId)
                 ->update([
                     'name' => $request->input('name'),
                     'content' => $request->input('content'),
                     'article_id' => $articleId,
                 ]);
+
+            DB::commit();
             $mailUserInform = Article::compilingComments($articleId);
             Mail::to($mailUserInform->address)->send(new CommentNoticeChange($mailUserInform));
             return new CommentUpdateResource($request);
@@ -89,14 +88,14 @@ class CommentController extends Controller
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
-            DB::commit();
             if (Comment::find($commentId) == null) {
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
             Comment::find($commentId)->delete();
-            return new CommentDeleteResource($request);
+            DB::commit();
 
+            return new CommentDeleteResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "コメントの削除に失敗致しました。"]);
