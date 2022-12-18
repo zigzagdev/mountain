@@ -60,6 +60,7 @@ Route::middleware('api')->group(function () {
         Route::controller(NewsMakingController::class)->group(function () {
             Route::post('/newsMake', 'newsMake');
             Route::put('/newsReWrite', 'newsReWrite');
+            Route::delete('/newsDelete', 'newsDelete');
         });
         //AdminController_Relations(passwordChange, emailChange, nameChange)
         Route::controller(AdminColumnChangeController::class)->group(function () {
