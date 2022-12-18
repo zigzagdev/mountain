@@ -100,8 +100,6 @@ class CommentController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => "コメントの削除に失敗致しました。"]);
-            $a = $e->getMessage();
-            print_r($a);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
