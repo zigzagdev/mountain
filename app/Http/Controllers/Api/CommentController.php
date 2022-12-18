@@ -8,7 +8,6 @@ use App\Http\Requests\Api\CommentRequest;
 use App\Http\Resources\Api\commentTotalCollection;
 use App\Http\Resources\Api\CommentUpdateResource;
 use App\Http\Resources\Api\ErrorResource;
-use App\Mail\Api\ArticleUpdateMail;
 use App\Mail\Api\CommentNoticeChange;
 use App\Models\Api\Article;
 use App\Models\Api\Comment;
@@ -44,7 +43,7 @@ class CommentController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "コメントの投稿に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::REGISTER_FAILED, 'コメント')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -74,7 +73,7 @@ class CommentController extends Controller
             return new CommentUpdateResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "コメントの更新に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::UPDATE_FAILED, 'コメント')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -98,7 +97,7 @@ class CommentController extends Controller
             return new CommentDeleteResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "コメントの削除に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::DELETE_FAILED, 'コメント')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }

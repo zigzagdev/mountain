@@ -23,6 +23,7 @@ class NewsMakingController extends Controller
     public function newsMake(NewsRequest $request)
     {
         try {
+            DB::beginTransaction();
             $adminId = $request->adminId;
             $admin = Admin::where('id', $adminId);
 
@@ -36,12 +37,12 @@ class NewsMakingController extends Controller
                 'admin_id' => $adminId,
                 'expiration' => Carbon::now()->addMonths(3),
             ]);
+            DB::commit();
             Mail::to($recordNews->address)->send(new NewsCreateMail($recordNews, $admin));
             return new NewsResource($request);
-
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "ニュース投稿の投稿に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::REGISTER_FAILED, 'ニュース')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
@@ -49,6 +50,7 @@ class NewsMakingController extends Controller
     public function newsReWrite(Request $request)
     {
         try {
+            DB::beginTransaction();
             $adminId = $request->adminId;
             $newsId = $request->id;
 
@@ -64,12 +66,13 @@ class NewsMakingController extends Controller
                     'admin_id' => $adminId,
                     'expiration' => Carbon::now()->addMonths(3),
                 ]);
+            DB::commit();
+
             Mail::to($findNews->address)->send(new NewsUpdateMail($findNews));
             return new NewsResource($request);
-
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "ニュース投稿の投稿に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::REGISTER_FAILED, 'ニュース')]);
             $statusMessage = $e->getMessage();
             print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);

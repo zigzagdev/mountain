@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Consts\Api\MessageConst;
+use App\Consts\CommonConst;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AdminRequest;
 use App\Http\Resources\Api\ErrorResource;
@@ -26,12 +27,11 @@ class RegisterUserController extends Controller
             $existUser = Admin::where('address', $request->address)->first();
 
             if (!empty($existUser)) {
-                $request->merge(['statusMessage' => sprintf(MessageConst::Bad_Request, '既にそのメールアドレスは使われています。')]);
+                $request->merge(['statusMessage' => sprintf(CommonConst::ERR_08)]);
                 $statusCode = MessageConst::Unauthorized;
 
                 return new ErrorResource($request, $statusCode);
             }
-            DB::commit();
             $admin = Admin::create([
                 'nick_name' => $request->input('nickName'),
                 'address' => $request->input('address'),
@@ -49,12 +49,12 @@ class RegisterUserController extends Controller
 
             $token = TokenMakeService::createToken($admin->id);
             $request->merge(['token' => $token]);
+
             DB::commit();
             return new RegisterUserResource($request);
-
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => "会員情報の登録に失敗致しました。"]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::REGISTER_FAILED, 'アカウント')]);
             $statusMessage = $e->getMessage();
             print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);

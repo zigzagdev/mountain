@@ -50,17 +50,18 @@ Route::middleware('api')->group(function () {
             Route::get('/logout', 'get');
         });
 
-        //ArticleControllers
+        //ArticleController
         Route::controller(ArticleController::class)->group(function () {
             Route::post('/articleWrite', 'articleWrite');
             Route::put('/articleReWrite', 'articleReWrite');
+            Route::delete('/articleDelete', 'articleDelete');
         });
-        //NewsControllers
+        //NewsController
         Route::controller(NewsMakingController::class)->group(function () {
             Route::post('/newsMake', 'newsMake');
             Route::put('/newsReWrite', 'newsReWrite');
         });
-        //AdminController_Relations(passwordChange, emailChange)
+        //AdminController_Relations(passwordChange, emailChange, nameChange)
         Route::controller(AdminColumnChangeController::class)->group(function () {
             Route::put('/emailChange', 'adminEmailChange');
             Route::put('/nameChange', 'adminNameChange');
