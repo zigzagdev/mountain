@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Consts\Api\MessageConst;
-use App\Http\Resources\Api\ArticleDeleteResource;
 use App\Http\Resources\Api\RegisterArticleResource;
+use App\Http\Resources\Api\SuccessResource;
 use App\Mail\Api\ArticleDeleteNotificationMail;
-use App\Mail\Api\ArticleDelteNotificationMail;
 use App\Mail\Api\ArticleUpdateMail;
 use App\Models\Api\Admin;
 use App\Consts\CommonConst;
@@ -131,7 +130,7 @@ class ArticleController extends Controller
             DB::commit();
 
             Mail::to($address)->send(new ArticleDeleteNotificationMail());
-            return new ArticleDeleteResource($request);
+            return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => sprintf(CommonConst::DELETE_FAILED, '該当記事')]);

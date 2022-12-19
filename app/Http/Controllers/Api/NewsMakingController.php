@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\NewsRequest;
 use App\Http\Resources\Api\ErrorResource;
 use App\Http\Resources\Api\NewsResource;
+use App\Http\Resources\Api\SuccessResource;
 use App\Mail\Api\ArticleUpdateMail;
 use App\Mail\Api\NewsCreateMail;
 use App\Mail\Api\NewsUpdateMail;
 use App\Models\Api\Admin;
+use App\Models\Api\Comment;
 use App\Models\Api\News;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceResponse;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -72,9 +75,33 @@ class NewsMakingController extends Controller
             return new NewsResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
-            $request->merge(['statusMessage' => sprintf(CommonConst::REGISTER_FAILED, 'ニュース')]);
-            $statusMessage = $e->getMessage();
-            print_r($statusMessage);
+            $request->merge(['statusMessage' => sprintf(CommonConst::UPDATE_FAILED, 'ニュース')]);
+            return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+    public function newsDelete(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $adminId = $request->adminId;
+            $newsId = $request->id;
+
+            $selectNews = News::selectedAllNews($newsId);
+            if (empty($selectNews)) {
+                $request->merge(['statusMessage' => CommonConst::ERR_12]);
+                return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
+            }
+
+            News::where([
+                'admin_id' => $adminId,
+                'id' => $selectNews->id
+            ])->delete();
+            DB::commit();
+            return new SuccessResource($request);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $request->merge(['statusMessage' => sprintf(CommonConst::DELETE_FAILED, 'ニュース')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
