@@ -9,6 +9,7 @@ use App\Http\Resources\Api\ErrorResource;
 use App\Http\Resources\Api\NewsResource;
 use App\Http\Resources\Api\SuccessResource;
 use App\Mail\Api\ArticleUpdateMail;
+use App\Mail\Api\NewsDeleteNotificationMail;
 use App\Mail\Api\NewsCreateMail;
 use App\Mail\Api\NewsUpdateMail;
 use App\Models\Api\Admin;
@@ -88,20 +89,26 @@ class NewsMakingController extends Controller
             $newsId = $request->id;
 
             $selectNews = News::selectedAllNews($newsId);
+
             if (empty($selectNews)) {
                 $request->merge(['statusMessage' => CommonConst::ERR_12]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
 
+            $address = $selectNews->address;
             News::where([
                 'admin_id' => $adminId,
                 'id' => $selectNews->id
             ])->delete();
+
             DB::commit();
+            Mail::to($address)->send(new NewsDeleteNotificationMail());
             return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => sprintf(CommonConst::DELETE_FAILED, 'ニュース')]);
+            $u = $e->getMessage();
+            var_dump($u);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
