@@ -15,6 +15,7 @@ use App\Http\Requests\Api\ArticleRequest;
 use App\Models\Api\Article;
 use App\Models\Api\Comment;
 use App\Models\Api\MountainRating;
+use App\Models\Api\News;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
@@ -117,7 +118,7 @@ class ArticleController extends Controller
             $articleId = $request->id;
 
             $findArticle = Article::selectedAllArticles($articleId);
-            if (empty($adminId)) {
+            if (empty($findArticle->id)) {
                 $request->merge(['statusMessage' => CommonConst::ERR_05]);
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
@@ -126,14 +127,19 @@ class ArticleController extends Controller
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
             $address = $findArticle->address;
-            Article::find($articleId)->delete();
             DB::commit();
+            Article::where([
+                'adminId' => $adminId,
+                'id' => $findArticle->id
+            ])->delete();
 
             Mail::to($address)->send(new ArticleDeleteNotificationMail());
             return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => sprintf(CommonConst::DELETE_FAILED, '該当記事')]);
+            $u = $e->getMessage();
+            var_dump($u);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
