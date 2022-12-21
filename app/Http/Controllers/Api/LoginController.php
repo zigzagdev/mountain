@@ -29,7 +29,6 @@ class LoginController extends Controller
             // パスワードをハッシュ化
             if (!Hash::check($password, $loginUser->password) ) {
                 $request->merge(['statusMessage' => CommonConst::ERR_01]);
-                var_dump($request->toArray());
                 return new ErrorResource($request, Response::HTTP_UNAUTHORIZED);
             }
             DB::beginTransaction();
@@ -42,8 +41,6 @@ class LoginController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => CommonConst::ERR_01]);
-            $statusMessage = $e->getMessage();
-            print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
