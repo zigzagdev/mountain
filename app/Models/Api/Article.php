@@ -22,7 +22,15 @@ class Article extends Model
     public static function selectedAllArticles($articleId)
     {
         return self::select([
-            'title', 'content', 'prefecture', 'mountain_name', 'mountain_rate', 'adminId', 'address', 'nick_name'
+            'title'
+            , 'content'
+            , 'prefecture'
+            , 'mountain_name'
+            , 'mountain_rate'
+            , 'address'
+            , 'nick_name'
+            , 'articles.id'
+            , 'adminId'
         ])->leftjoin('admins', function ($join) {
             $join->on('articles.adminId', '=', 'admins.id');
         })->where('articles.id', $articleId)

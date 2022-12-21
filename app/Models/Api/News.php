@@ -15,11 +15,10 @@ class News extends Model
     public static function selectedAllNews($newsId)
     {
         return self::select([
-            'news_title', 'news_content', 'address', 'nick_name'
+            'news_title', 'news_content', 'address', 'nick_name', 'news.id'
         ])->leftjoin('admins', function ($join) {
             $join->on('news.admin_id', '=', 'admins.id');
         })->where('news.id', $newsId)
-            ->orderBy('news.created_at', 'asc')
             ->first();
     }
 }

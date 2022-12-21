@@ -9,11 +9,16 @@ class Admin extends Model
 {
     use SoftDeletes, CascadeSoftDeletes;
     protected $guarded = ['id'];
-    protected $softCascade = ['articles'];
-    protected $cascadeDeletes = ['articles'];
+    protected $softCascade = ['articles', 'news'];
+    protected $cascadeDeletes = ['articles', 'news'];
 
     public function articles()
     {
         return $this->hasMany(Article::class);
+    }
+
+    public function news()
+    {
+        return $this->hasMany(News::class);
     }
 }

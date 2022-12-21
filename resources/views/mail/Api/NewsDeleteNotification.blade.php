@@ -1,6 +1,6 @@
 @extends('mail.Common.Template')
 @include('mail.Common.Header')
 @section('Content')
-    your article was deleted correctly !
+    your news was deleted correctly !
 @include('mail.Common.Footer')
 @endsection
