@@ -80,8 +80,6 @@ class DisplayController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => sprintf(CommonConst::FETCH_FAILED, '検索内容')]);
-            $statusMessage = $e->getMessage();
-            print_r($statusMessage);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }
