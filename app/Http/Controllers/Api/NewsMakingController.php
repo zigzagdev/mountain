@@ -107,8 +107,6 @@ class NewsMakingController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             $request->merge(['statusMessage' => sprintf(CommonConst::DELETE_FAILED, 'ニュース')]);
-            $u = $e->getMessage();
-            var_dump($u);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }
     }

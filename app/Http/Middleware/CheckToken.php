@@ -29,7 +29,7 @@ class CheckToken extends Middleware
         $validToken = AdminToken::latest('created_at')->first();
 
         if ($token != $validToken->toArray()['token']) {
-            $request->merge(['statusMessage' => CommonConst::ERR_12]);
+            $request->merge(['statusMessage' => sprintf(CommonConst::FAILED, 'ユーザーの読み込み')]);
             return new ErrorResource($request, Response::HTTP_UNAUTHORIZED);
         }
         return $next($request);

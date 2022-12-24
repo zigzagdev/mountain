@@ -47,7 +47,7 @@ Route::middleware('api')->group(function () {
 
         //LogoutController
         Route::controller(LogoutController::class)->group(function () {
-            Route::get('/logout', 'get');
+            Route::get('/logout', 'logout');
         });
 
         //ArticleController

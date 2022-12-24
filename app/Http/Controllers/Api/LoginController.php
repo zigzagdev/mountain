@@ -20,6 +20,7 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         try {
+            DB::beginTransaction();
             $loginUser = Admin::where('address', $request->address)->first();
             if (empty($loginUser)) {
                 $request->merge(['statusMessage' => CommonConst::ERR_01]);
@@ -31,7 +32,6 @@ class LoginController extends Controller
                 $request->merge(['statusMessage' => CommonConst::ERR_01]);
                 return new ErrorResource($request, Response::HTTP_UNAUTHORIZED);
             }
-            DB::beginTransaction();
 
             //トークン生成
             $token = TokenMakeService::createToken($loginUser->id);

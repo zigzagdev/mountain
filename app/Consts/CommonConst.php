@@ -32,7 +32,8 @@ class CommonConst
     public const ERR_13 = "既にアカウント登録されています。ログイン画面からログインしてください。";
     public const ERR_14 = "セッションが切れています。もう一度ログインし直してください。";
     public const ERR_15 = "記事の投稿に失敗致しました。";
-    public const ERR_16 = "コラムの投稿に失敗致しました。";
+    public const ERR_16 = "ニュースの投稿に失敗致しました。";
+
 
 
 }
