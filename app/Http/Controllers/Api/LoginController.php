@@ -35,8 +35,8 @@ class LoginController extends Controller
 
             //トークン生成
             $token = TokenMakeService::createToken($loginUser->id);
-            DB::commit();
             $request->merge(['adminToken' => $token, 'adminId' => $loginUser->id]);
+            DB::commit();
             return new AdminLoginResource($request);
         } catch (\Exception $e) {
             DB::rollBack();

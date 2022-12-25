@@ -67,8 +67,8 @@ class CommentController extends Controller
                     'article_id' => $articleId,
                 ]);
 
-            DB::commit();
             $mailUserInform = Article::compilingComments($articleId);
+            DB::commit();
             Mail::to($mailUserInform->address)->send(new CommentNoticeChange($mailUserInform));
             return new CommentUpdateResource($request);
         } catch (\Exception $e) {
@@ -93,7 +93,6 @@ class CommentController extends Controller
             }
             Comment::find($commentId)->delete();
             DB::commit();
-
             return new CommentDeleteResource($request);
         } catch (\Exception $e) {
             DB::rollBack();

@@ -71,7 +71,6 @@ class NewsMakingController extends Controller
                     'expiration' => Carbon::now()->addMonths(3),
                 ]);
             DB::commit();
-
             Mail::to($findNews->address)->send(new NewsUpdateMail($findNews));
             return new NewsResource($request);
         } catch (\Exception $e) {

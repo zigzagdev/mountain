@@ -78,7 +78,6 @@ class DisplayController extends Controller
             }
             return new RatingDisplayCollection($avg);
         } catch (\Exception $e) {
-            DB::rollBack();
             $request->merge(['statusMessage' => sprintf(CommonConst::FETCH_FAILED, '検索内容')]);
             return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
         }

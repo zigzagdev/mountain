@@ -17,6 +17,7 @@ class LogoutController extends Controller
     public function logout(Request $request)
     {
         try {
+            DB::beginTransaction();
             $expirationValid =  AdminToken::where('admin_id', $request->adminId)->orderBy('created_at', 'desc')->first();
             if ($expirationValid->expired_at <= Carbon::now()) {
                 $request->merge(['statusMessage' => sprintf(CommonConst::FAILED, 'ログアウト')]);
@@ -26,6 +27,7 @@ class LogoutController extends Controller
             ->where('expired_at', '>', Carbon::now())->update([
                 'expired_at' => Carbon::now()
             ]);
+            DB::commit();
             return new SuccessResource($request);
         } catch (\Exception $e) {
             DB::rollBack();
