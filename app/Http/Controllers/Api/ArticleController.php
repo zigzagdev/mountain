@@ -15,11 +15,9 @@ use App\Http\Requests\Api\ArticleRequest;
 use App\Models\Api\Article;
 use App\Models\Api\Comment;
 use App\Models\Api\MountainRating;
-use App\Models\Api\News;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
-use App\Consts\Api\Prefecture;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Mail\Api\ArticleCreateMail;
@@ -31,6 +29,7 @@ class ArticleController extends Controller
     public function articleWrite(ArticleRequest $request)
     {
         try {
+            DB::beginTransaction();
             $adminId = $request->adminId;
 
             // Whether admin is existed or not .
@@ -59,7 +58,7 @@ class ArticleController extends Controller
                     'mountain_name' => $request->input('mountainName'),
                     'prefecture' => $request->input('prefecture'),
                 ]);
-
+            DB::commit();
             Mail::to($admin->address)->send(new ArticleCreateMail($admin, $newArticle));
             return new RegisterArticleResource($request);
         } catch (\Exception $e) {
@@ -127,12 +126,12 @@ class ArticleController extends Controller
                 return new ErrorResource($request, Response::HTTP_BAD_REQUEST);
             }
             $address = $findArticle->address;
-            DB::commit();
             Article::where([
                 'adminId' => $adminId,
                 'id' => $findArticle->id
             ])->delete();
 
+            DB::commit();
             Mail::to($address)->send(new ArticleDeleteNotificationMail());
             return new SuccessResource($request);
         } catch (\Exception $e) {
