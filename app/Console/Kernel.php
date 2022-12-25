@@ -19,9 +19,10 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         ReadNews::class
     ];
+
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command('command:name')->monthly();
+         $schedule->command('command:name')->monthly()->at('10:00');
     }
 
     /**

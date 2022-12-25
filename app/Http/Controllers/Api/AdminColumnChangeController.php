@@ -10,10 +10,8 @@ use App\Http\Requests\Api\PasswordRequest;
 use App\Http\Resources\Api\ErrorResource;
 use App\Http\Resources\Api\SuccessResource;
 use App\Models\Api\Admin;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use PharIo\Manifest\Email;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -21,7 +19,6 @@ class AdminColumnChangeController extends Controller
 {
     public function adminEmailChange(EmailRequest $request)
     {
-        // emailChangeFunction
         try {
             DB::beginTransaction();
             $adminId = $request->admin_id;
