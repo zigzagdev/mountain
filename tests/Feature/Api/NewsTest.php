@@ -1,14 +1,15 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Api;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
-class ExampleTest extends TestCase
+class NewsTest extends TestCase
 {
     /**
-     * A basic test example.
+     * A basic feature test example.
      *
      * @return void
      */
